@@ -31,7 +31,7 @@ class Calculate
       elsif optimized_move != nil
         return optimized_move
       end
-      
+
       wld = create_wld_array(board, current_team(board), current_team(board), 0)  # Create a win/loss/draw array
       calculated_move = calculate_best_move(board, wld)
 
@@ -210,7 +210,7 @@ class Calculate
 
     def find_a_move_better_than_the_default(wld, best_move, row, col)
       temp_score = (wld[row][col][0] - wld[row][col][1])
-      if temp_score > (wld[best_move[0]][best_move[1]][0] - wld[best_move[0]][best_move[1]][1])
+      if (temp_score > (wld[best_move[0]][best_move[1]][0] - wld[best_move[0]][best_move[1]][1])) && temp_score != 0
         best_move = [row, col]
       end
 
