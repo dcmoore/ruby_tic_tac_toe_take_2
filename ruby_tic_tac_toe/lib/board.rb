@@ -98,7 +98,7 @@ class Board
 
     @dim_rows.times do |row|
       @dim_cols.times do |col|
-        @spaces.push(Space.new(row, col))
+        @spaces.push(Space.new(row, col, EMPTY))
       end
     end
   end

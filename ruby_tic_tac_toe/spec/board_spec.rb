@@ -7,19 +7,19 @@ describe Board do
   end
 
   it "make_move(row, col, team) - updates the game board to reflect a move by the specified team" do
-    @board.make_move(0,0,1)
-    @board.space_contents(0,0).should == 1
+    @board.make_move(0,0,X)
+    @board.space_contents(0,0).should == X
   end
 
   it "reset - clears all previous moves from the game board" do
     @board.make_move(0,0,2)
     @board.reset
-    @board.space_contents(0,0).should == 0
+    @board.space_contents(0,0).should == EMPTY
   end
 
   it "space_contents(row, col) - returns the contents of the specified space" do
-    @board.make_move(0,0,1)
-    @board.space_contents(0,0).should == 1
+    @board.make_move(0,0,X)
+    @board.space_contents(0,0).should == X
   end
 
   it "convert_space_val_to_graphic - graphically converts 0 to empty space, 1 to X, and 2 to O" do

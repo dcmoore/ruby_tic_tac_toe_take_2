@@ -107,7 +107,6 @@ class GameEngine
     aiMove = Calculate.ai_best_move(@board)
     row = aiMove[0]
     col = aiMove[1]
-    puts row.to_s + " " + col.to_s
 
     if @board.space_contents(row, col) == EMPTY
       @board.make_move(row, col, team)

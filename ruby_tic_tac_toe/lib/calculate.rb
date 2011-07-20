@@ -97,7 +97,7 @@ class Calculate
         else
           return empty_winners[i] if win?(board, O) == true
         end
-        board.make_move(empty_winners[i][0], empty_winners[i][1], 0)
+        board.make_move(empty_winners[i][0], empty_winners[i][1], EMPTY)
       end
       return nil
     end
@@ -117,17 +117,17 @@ class Calculate
 
 
     def create_wld_array(board, ai_team, cur_team, depth)
-      wld = Array.new(board.dim_rows) {Array.new(board.dim_rows) {Array.new(3,EMPTY)}}
+      wld = Array.new(board.dim_rows) {Array.new(board.dim_rows) {Array.new(3,0)}}
 
       board.spaces.each do |space|
-        if board.space_contents(space.row, space.col) == 0  # Is this an empty space?
+        if board.space_contents(space.row, space.col) == EMPTY
           wld, board = fill_out_wld_array(wld, board, space.row, space.col, ai_team, cur_team, depth)
         end
       end
 
       return wld  # If the loop is over, return this depth's completed wld array
     end
-
+    
 
     #TODO - break up into smaller method
     def fill_out_wld_array(wld, board, row, col, ai_team, cur_team, depth)
@@ -135,13 +135,13 @@ class Calculate
 
       if is_game_over?(board) == true
         wld = update_wld(row, col, ai_team, board, wld)
-        board.make_move(row, col, 0)  # Take back hypothetical move
+        board.make_move(row, col, EMPTY)  # Take back hypothetical move
         return [wld, board]
       end
 
       temp_array = create_wld_array(board, ai_team, current_team(board), depth+1)  # Recursively call ai_best_move at 1 more level of depth
       wld = add_recursed_wld_vals(temp_array, wld, board, row, col)  # Add return value (array) of recursive call to wld array
-      board.make_move(row, col, 0)  # Take back hypothetical move
+      board.make_move(row, col, EMPTY)  # Take back hypothetical move
 
       return [wld, board]
     end
@@ -187,11 +187,11 @@ class Calculate
 
 
     def calculate_best_move(board, wld)
-      best_move = [0, 0]
+      best_move = [nil, nil]
       board.spaces.each do |space|
-        if wld[space.row][space.col] != [1,1,1]  # Ensures that the spaces being evaluated are empty spaces on the board
+        if board.space_contents(space.row, space.col) == EMPTY
           best_move = set_a_default_value_if_it_hasnt_already_been_set(best_move, space.row, space.col)
-          best_move = find_a_move_better_than_the_default(wld, best_move, space.row, space.col)
+          best_move = find_a_move_better_than_the_default(board, wld, best_move, space.row, space.col)
         end
       end
 
@@ -200,7 +200,7 @@ class Calculate
 
 
     def set_a_default_value_if_it_hasnt_already_been_set(best_move, row, col)
-      if best_move == [0,0]
+      if best_move == [nil, nil]
         best_move = [row,col]  # Makes sure that best move by default equals an empty space on the board
       end
 
@@ -208,9 +208,9 @@ class Calculate
     end
 
 
-    def find_a_move_better_than_the_default(wld, best_move, row, col)
+    def find_a_move_better_than_the_default(board, wld, best_move, row, col)
       temp_score = (wld[row][col][0] - wld[row][col][1])
-      if (temp_score > (wld[best_move[0]][best_move[1]][0] - wld[best_move[0]][best_move[1]][1])) && temp_score != 0
+      if  (temp_score > (wld[best_move[0]][best_move[1]][0] - wld[best_move[0]][best_move[1]][1]))
         best_move = [row, col]
       end
 
