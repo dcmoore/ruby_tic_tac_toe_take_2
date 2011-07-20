@@ -117,7 +117,7 @@ class Calculate
 
 
     def create_wld_array(board, ai_team, cur_team, depth)
-      wld = Array.new(board.dim_rows) {Array.new(board.dim_rows) {Array.new(3,0)}}
+      wld = Array.new(board.dim_rows) {Array.new(board.dim_cols, 0)}
 
       board.spaces.each do |space|
         if board.space_contents(space.row, space.col) == EMPTY
@@ -149,37 +149,33 @@ class Calculate
 
     def update_wld(row, col, ai_team, board, wld)
       if win?(board, ai_team) == true
-        wld = update_wld_helper(row, col, ai_team, board, wld, 0)
+        wld[row][col] += 1
+        wld = weigh_traps(row, col, ai_team, board, wld, WIN)
       elsif win?(board, ai_team) == false
-        wld = update_wld_helper(row, col, ai_team, board, wld, 1)
-      elsif draw?(board) == true
-        wld = update_wld_helper(row, col, ai_team, board, wld, 2)
+        wld[row][col] -= 1
+        wld = weigh_traps(row, col, ai_team, board, wld, LOSS)
       end
 
       return wld
     end
-
-
-    def update_wld_helper(row, col, ai_team, board, wld, update_w_l_or_d)
-      wld[row][col][update_w_l_or_d] += 1
-
-      if find_best_empty_winner(board, ai_team) != nil  # Heavily weighs traps
-        if update_w_l_or_d == 0
-          wld[row][col][0] += 4
-        elsif update_w_l_or_d == 1
-          wld[row][col][1] += 12
+    
+    
+    def weigh_traps(row, col, ai_team, board, wld, win_or_loss)
+      if find_best_empty_winner(board, ai_team) != nil
+        if win_or_loss == WIN
+          wld[row][col] += 4
+        elsif win_or_loss == LOSS
+          wld[row][col] -= 12
         end
       end
-
+      
       return wld
     end
 
 
     def add_recursed_wld_vals(temp_array, wld, board, r, c)
       board.spaces.each do |space|
-        wld[r][c][0] += temp_array[space.row][space.col][0]
-        wld[r][c][1] += temp_array[space.row][space.col][1]
-        wld[r][c][2] += temp_array[space.row][space.col][2]
+        wld[r][c] += temp_array[space.row][space.col]
       end
 
       return wld
@@ -209,8 +205,8 @@ class Calculate
 
 
     def find_a_move_better_than_the_default(board, wld, best_move, row, col)
-      temp_score = (wld[row][col][0] - wld[row][col][1])
-      if  (temp_score > (wld[best_move[0]][best_move[1]][0] - wld[best_move[0]][best_move[1]][1]))
+      temp_score = wld[row][col]
+      if  temp_score > wld[best_move[0]][best_move[1]]
         best_move = [row, col]
       end
 
