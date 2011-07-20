@@ -30,7 +30,7 @@ describe GameEngine do
     @myio_in.string = "1\nO"
     start_game
     @my_game.run_computers_turn(X)
-    @myio_out.string.should == @initializers_output + "Please wait, computer thinking of next move...\n1 1\nComputer moved to space: 11\n"
+    @myio_out.string.should == @initializers_output + "Please wait, computer thinking of next move...\nComputer moved to space: 11\n"
   end
   
   it "run_humans_turn(team) makes a move based off of human input." do

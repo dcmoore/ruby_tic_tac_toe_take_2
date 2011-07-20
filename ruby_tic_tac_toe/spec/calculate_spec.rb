@@ -93,7 +93,7 @@ describe Calculate do
 
     # Print a flat profile to text
     printer = RubyProf::FlatPrinter.new(result)
-    printer.print(STDOUT, 0)
+    printer.print(File.new("ruby_prof_log.txt", "w"), 0)
   end
 
   def setup_draw
