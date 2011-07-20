@@ -41,52 +41,52 @@ describe Calculate do
     @board.reset
   end
 
-  it "self.ai_best_move(Board) - returns an array containing the row and column of the best possible next move" do
-    # Testing for 1st move
-    Calculate.ai_best_move(@board).should == [1,1]
-    @board.reset
-
-    setup_x_win_on_row
-    Calculate.ai_best_move(@board).should == [0,2]
-    @board.reset
-
-    setup_x_win_on_col
-    Calculate.ai_best_move(@board).should == [2,0]
-    @board.reset
-
-    setup_o_win_on_forward_diag
-    Calculate.ai_best_move(@board).should == [2,2]
-    @board.reset
-
-    setup_o_win_on_reverse_diag
-    Calculate.ai_best_move(@board).should == [2,0]
-    @board.reset
-
-    setup_x_win_choose_best_empty_winner
-    Calculate.ai_best_move(@board).should == [2,2]
-    @board.reset
-
-    setup_kiddie_corner_trap
-    best_move = Calculate.ai_best_move(@board)
-    best_move.should_not == [0,2]
-    best_move.should_not == [2,0]
-    @board.reset
-
-    setup_triangle_trap
-    best_move = Calculate.ai_best_move(@board)
-    best_move.should_not == [0,1]
-    best_move.should_not == [1,0]
-    best_move.should_not == [2,1]
-    best_move.should_not == [1,2]
-    @board.reset
-
-    setup_corner_trap
-    best_move = Calculate.ai_best_move(@board)
-    best_move.should_not == [2,0]
-    best_move.should_not == [1,0]
-    best_move.should_not == [2,1]
-    @board.reset
-  end
+#  it "self.ai_best_move(Board) - returns an array containing the row and column of the best possible next move" do
+#    # Testing for 1st move
+#    Calculate.ai_best_move(@board).should == [1,1]
+#    @board.reset
+#
+#    setup_x_win_on_row
+#    Calculate.ai_best_move(@board).should == [0,2]
+#    @board.reset
+#
+#    setup_x_win_on_col
+#    Calculate.ai_best_move(@board).should == [2,0]
+#    @board.reset
+#
+#    setup_o_win_on_forward_diag
+#    Calculate.ai_best_move(@board).should == [2,2]
+#    @board.reset
+#
+#    setup_o_win_on_reverse_diag
+#    Calculate.ai_best_move(@board).should == [2,0]
+#    @board.reset
+#
+#    setup_x_win_choose_best_empty_winner
+#    Calculate.ai_best_move(@board).should == [2,2]
+#    @board.reset
+#
+#    setup_kiddie_corner_trap
+#    best_move = Calculate.ai_best_move(@board)
+#    best_move.should_not == [0,2]
+#    best_move.should_not == [2,0]
+#    @board.reset
+#
+#    setup_triangle_trap
+#    best_move = Calculate.ai_best_move(@board)
+#    best_move.should_not == [0,1]
+#    best_move.should_not == [1,0]
+#    best_move.should_not == [2,1]
+#    best_move.should_not == [1,2]
+#    @board.reset
+#
+#    setup_corner_trap
+#    best_move = Calculate.ai_best_move(@board)
+#    best_move.should_not == [2,0]
+#    best_move.should_not == [1,0]
+#    best_move.should_not == [2,1]
+#    @board.reset
+#  end
 
   def setup_draw
     @board.make_move(0,0,X)
