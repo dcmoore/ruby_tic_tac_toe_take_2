@@ -48,6 +48,7 @@ describe Board do
     make_3_moves
     new_board = @board.clone_board
     new_board.object_id.should_not == @board.object_id
+    @board.make_move(4, EMPTY)
     new_board.space_contents(4).should == O
   end
 

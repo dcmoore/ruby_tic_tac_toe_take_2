@@ -132,17 +132,26 @@ class Calculate
         #TODO - break up into smaller method
         def fill_out_wld_array(wld, board, location, ai_team, cur_team, depth)
           board.make_move(location, current_team(board))  # Make a hypothetical move
+          #puts "Making Move at Depth: " + depth.to_s
+          #puts board.draw_board
 
           if is_game_over?(board) == true
             wld = update_wld(location, ai_team, board, wld)
             board.make_move(location, EMPTY)  # Take back hypothetical move
+            
+            #puts "WLD at depth: " + depth.to_s
+            #print_wld(wld, board)
+            
             return [wld, board]
           end
 
           temp_array = create_wld_array(board, ai_team, current_team(board), depth+1)  # Recursively call ai_best_move at 1 more level of depth
           wld = add_recursed_wld_vals(temp_array, wld, board, location)  # Add return value (array) of recursive call to wld array
           board.make_move(location, EMPTY)  # Take back hypothetical move
-
+          
+          #puts "WLD at depth: " + depth.to_s
+          #print_wld(wld, board)
+          
           return [wld, board]
         end
 
@@ -183,7 +192,7 @@ class Calculate
 
 
         def calculate_best_move(board, wld)
-          best_move = "n"
+          best_move = nil
           board.num_total_spaces.times do |location|
             if board.space_contents(location) == EMPTY
               best_move = set_a_default_value_if_it_hasnt_already_been_set(best_move, location)
@@ -196,7 +205,7 @@ class Calculate
 
 
         def set_a_default_value_if_it_hasnt_already_been_set(best_move, location)
-          if best_move == "n"
+          if best_move == nil
             best_move = location  # Makes sure that best move by default equals an empty space on the board
           end
 
@@ -261,6 +270,20 @@ class Calculate
           end
 
           return ["nothing_interesting", 0]
+        end
+        
+        
+        def print_wld(wld, board)
+          display_block = ""
+
+          board.num_total_spaces.times do |location|
+            display_block += "|" + wld[location].to_s
+            if (location % board.dim_cols) == (board.dim_cols - 1)
+              display_block += "|\n"
+            end
+          end
+
+          puts display_block
         end
   end
 end
