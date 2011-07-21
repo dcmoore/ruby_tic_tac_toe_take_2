@@ -1,6 +1,5 @@
 require File.dirname(__FILE__) + "/spec_helper"
 require 'game_engine'
-require 'stringio'
 
 describe GameEngine do
   before do
@@ -30,21 +29,21 @@ describe GameEngine do
     @myio_in.string = "1\nO"
     start_game
     @my_game.run_computers_turn(X)
-    @myio_out.string.should == @initializers_output + "Please wait, computer thinking of next move...\nComputer moved to space: 11\n"
+    @myio_out.string.should == @initializers_output + "Please wait, computer thinking of next move...\nComputer moved to space: 4\n"
   end
   
   it "run_humans_turn(team) makes a move based off of human input." do
-    @myio_in.string = "1\nX\n12"
+    @myio_in.string = "1\nX\n5"
     start_game
     @my_game.run_humans_turn(X)
-    @myio_out.string.should == @initializers_output + "type location of next move Ex. '01' for row 0 and column 1\nMove successfully made\n"
+    @myio_out.string.should == @initializers_output + "type location of next move Ex. '0' for the top-left or '8' for the bottom-right\nMove successfully made\n"
   end
   
   it "validate_move(move) ensures that a valid move is being made" do
     @myio_in.string = "1\nX\n00"
     start_game
     @my_game.validate_move("99")
-    @myio_out.string.should == @initializers_output + "Invalid Move\ntype location of next move Ex. '01' for row 0 and column 1\n"
+    @myio_out.string.should == @initializers_output + "Invalid Move\ntype location of next move Ex. '0' for the top-left or '8' for the bottom-right\n"
   end
   
   it "game_over ends the game and prints whether x won, o won, or nobody won" do
@@ -54,7 +53,7 @@ describe GameEngine do
   end
   
   def setup_draw
-    @myio_in.string = "1\nX\n00\n01\n02\n11\n10\n12\n21\n20\n22\n"
+    @myio_in.string = "1\nX\n0\n1\n2\n4\n3\n5\n7\n6\n8\n"
     start_game
     @my_game.run_humans_turn(X)
     @my_game.run_humans_turn(O)
@@ -65,6 +64,6 @@ describe GameEngine do
     @my_game.run_humans_turn(X)
     @my_game.run_humans_turn(O)
     @my_game.run_humans_turn(X)
-    @move_output_9 = "type location of next move Ex. '01' for row 0 and column 1\nMove successfully made\ntype location of next move Ex. '01' for row 0 and column 1\nMove successfully made\ntype location of next move Ex. '01' for row 0 and column 1\nMove successfully made\ntype location of next move Ex. '01' for row 0 and column 1\nMove successfully made\ntype location of next move Ex. '01' for row 0 and column 1\nMove successfully made\ntype location of next move Ex. '01' for row 0 and column 1\nMove successfully made\ntype location of next move Ex. '01' for row 0 and column 1\nMove successfully made\ntype location of next move Ex. '01' for row 0 and column 1\nMove successfully made\ntype location of next move Ex. '01' for row 0 and column 1\nMove successfully made\n"
+    @move_output_9 = "type location of next move Ex. '0' for the top-left or '8' for the bottom-right\nMove successfully made\ntype location of next move Ex. '0' for the top-left or '8' for the bottom-right\nMove successfully made\ntype location of next move Ex. '0' for the top-left or '8' for the bottom-right\nMove successfully made\ntype location of next move Ex. '0' for the top-left or '8' for the bottom-right\nMove successfully made\ntype location of next move Ex. '0' for the top-left or '8' for the bottom-right\nMove successfully made\ntype location of next move Ex. '0' for the top-left or '8' for the bottom-right\nMove successfully made\ntype location of next move Ex. '0' for the top-left or '8' for the bottom-right\nMove successfully made\ntype location of next move Ex. '0' for the top-left or '8' for the bottom-right\nMove successfully made\ntype location of next move Ex. '0' for the top-left or '8' for the bottom-right\nMove successfully made\n"
   end
 end

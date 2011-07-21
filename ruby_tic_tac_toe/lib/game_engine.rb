@@ -104,23 +104,20 @@ class GameEngine
 
   def run_computers_turn(team)
     $stdout.puts "Please wait, computer thinking of next move..."
-    aiMove = Calculate.ai_best_move(@board)
-    row = aiMove[0]
-    col = aiMove[1]
+    ai_move = Calculate.ai_best_move(@board)
 
-    if @board.space_contents(row, col) == EMPTY
-      @board.make_move(row, col, team)
-      $stdout.puts "Computer moved to space: " + row.to_s + col.to_s
+    if @board.space_contents(ai_move) == EMPTY
+      @board.make_move(ai_move, team)
+      $stdout.puts "Computer moved to space: " + ai_move.to_s
     end
   end
 
 
   def run_humans_turn(team)
     move = get_human_players_move
-    row, col = move
 
-    if @board.space_contents(row, col) == EMPTY
-      @board.make_move(row, col, team)
+    if @board.space_contents(move) == EMPTY
+      @board.make_move(move, team)
       $stdout.puts "Move successfully made"
     else
       $stdout.puts "Cannot move to a space that is already full"
@@ -129,25 +126,21 @@ class GameEngine
 
 
   def get_human_players_move
-    $stdout.puts "type location of next move Ex. '01' for row 0 and column 1"
+    $stdout.puts "type location of next move Ex. '0' for the top-left or '8' for the bottom-right"
     move = $stdin.gets.chomp
-    move = validate_move(move)
 
-    row = move[0,1].to_i
-    col = move[1,1].to_i
-
-    return [row, col]
+    return validate_move(move)
   end
 
 
   def validate_move(move)
-    while !(move[0,1].to_i < @board.dim_rows && move[1,1].to_i < @board.dim_cols)
+    while !(move.to_i < @board.num_total_spaces)
       $stdout.puts "Invalid Move"
-      $stdout.puts "type location of next move Ex. '01' for row 0 and column 1"
+      $stdout.puts "type location of next move Ex. '0' for the top-left or '8' for the bottom-right"
       move = $stdin.gets.chomp
     end
 
-    return move
+    return move.to_i
   end
 
 

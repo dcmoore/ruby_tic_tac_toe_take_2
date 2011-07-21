@@ -6,44 +6,45 @@ class Board
   def initialize(rows, cols)
     @dim_rows = rows
     @dim_cols = cols
-    initialize_spaces
+    @spaces = Hash.new(EMPTY)
   end
 
 
   def reset
-    initialize_spaces
+    @spaces.clear
   end
 
 
-  def space_contents(row, col)
-    @spaces.each do |space|
-      if space.row == row && space.col == col
-        return space.val
-      end
-    end
+  def space_contents(location)
+    return @spaces[location]
   end
 
 
-  def make_move(row, col, team)
-    @spaces.each do |space|
-      if space.row == row && space.col == col
-        space.val = team
-      end
+  def make_move(location, team)
+    if team == EMPTY
+      @spaces.delete(location)
+    else
+      @spaces[location] = team
     end
+  end
+  
+  
+  def num_total_spaces
+    return @dim_rows * @dim_cols
   end
 
 
   def draw_board
-    displayBlock = ""
-
-    @spaces.each do |space|
-      displayBlock += "|" + convert_space_val_to_graphic(space_contents(space.row, space.col))
-      if space.col == (@dim_cols - 1)
-        displayBlock += "|\n"
+    display_block = ""
+    
+    num_total_spaces.times do |location|
+      display_block += "|" + convert_space_val_to_graphic(@spaces[location])
+      if (location % @dim_cols) == (@dim_cols - 1)
+        display_block += "|\n"
       end
     end
-
-    puts displayBlock
+    
+    puts display_block
   end
 
 
@@ -60,9 +61,9 @@ class Board
 
   def clone_board
     board_copy = Board.new(@dim_rows, @dim_cols)
-
-    @spaces.each do |space|
-        board_copy.make_move(space.row, space.col, space_contents(space.row, space.col))
+    
+    @spaces.each do |key, value|
+      board_copy.make_move(key, value)
     end
 
     return board_copy
@@ -70,15 +71,7 @@ class Board
 
 
   def num_moves_made
-    count = 0
-
-    @spaces.each do |space|
-      if space_contents(space.row, space.col) != EMPTY
-        count += 1
-      end
-    end
-
-    return count
+    return @spaces.length
   end
 
 
@@ -88,18 +81,5 @@ class Board
     end
 
     return false
-  end
-
-
-  private
-
-  def initialize_spaces
-    @spaces = []
-
-    @dim_rows.times do |row|
-      @dim_cols.times do |col|
-        @spaces.push(Space.new(row, col, EMPTY))
-      end
-    end
   end
 end
