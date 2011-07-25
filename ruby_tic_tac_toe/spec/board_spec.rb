@@ -44,9 +44,9 @@ describe Board do
     @board.convert_space_val_to_graphic(O).should == "O"
   end
 
-  it "clone_board - returns a copy of the current board as a new object" do
+  it "dup - returns a deep copy of the current board as a new object" do
     make_3_moves
-    new_board = @board.clone_board
+    new_board = @board.dup
     new_board.object_id.should_not == @board.object_id
     @board.make_move(4, EMPTY)
     new_board.space_contents(4).should == O

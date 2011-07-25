@@ -1,5 +1,3 @@
-require 'space'
-
 class Board
   attr_reader :dim_rows, :dim_cols, :spaces
 
@@ -59,7 +57,8 @@ class Board
   end
 
 
-  def clone_board
+  # conventionally, you should overide the dup method
+  def dup
     board_copy = Board.new(@dim_rows, @dim_cols)
     
     @spaces.each do |key, value|
