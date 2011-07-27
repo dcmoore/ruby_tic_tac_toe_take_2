@@ -54,66 +54,12 @@ class Calculate
     end
     
     def best_move(board)
-      return minimax(board, 0)
-    end
-    
-    def minimax(board, depth)
-      best_move_location, best_move_minimax_val, max_depth = nil, -2, 5
-      
-      if is_game_over?(board) == true
-        puts "Game Over"
-        puts ""
-        if draw?(board) == true
-          return minimax_return_value(depth, 0, best_move_location)
-        else #Win
-          return minimax_return_value(depth, -1, best_move_location)
-        end
-      end
-      if depth == max_depth+1
-        return minimax_return_value(depth, 0, best_move_location)
-      end
-      
-      if depth <= max_depth
-        board.num_total_spaces.times do |location|
-          if board.space_contents(location) == EMPTY
-            team = current_team(board)
-            board.make_move(location, current_team(board))
-            @@stored_calc[:check_flag] = 0
-            
-            puts "Making move to space: " + location.to_s + " at depth: " + depth.to_s + " with team: " + board.convert_space_val_to_graphic(team)
-            board.draw_board
-            
-            current_space_minimax_val = minimax(board, depth+1) * -1
-            puts "Value returned for space " + location.to_s + ": " + current_space_minimax_val.to_s + " at depth: " + depth.to_s
-            board.make_move(location, EMPTY)
-            @@stored_calc[:check_flag] = 0
-
-            if current_space_minimax_val > best_move_minimax_val
-              best_move_minimax_val = current_space_minimax_val
-              best_move_location = location
-              if best_move_minimax_val == 1
-                return minimax_return_value(depth, 1, best_move_location)
-              end
-            end
-          end
-        end
-      end
-      
-      puts "Board at depth: " + depth.to_s
-      board.draw_board
-      puts "Best Move value = " + best_move_minimax_val.to_s + " and location = " + best_move_location.to_s
-      puts ""
-      return minimax_return_value(depth, best_move_minimax_val, best_move_location)
-    end
-    
-    def minimax_return_value(depth, minimax_val, location)
-      if depth == 0
-        return location
+      if board.num_moves_made == 0
+        return minimax(board, 0, 2)
       else
-        return minimax_val
+        return minimax(board, 0, 5)
       end
     end
-
 
     private # The rest of the methods in this class are private
     
@@ -179,6 +125,57 @@ class Calculate
       end
 
       return ["nothing_interesting", 0]
+    end
+    
+    #TODO - split into smaller methods
+    def minimax(board, depth, max_depth)
+      best_move_location, best_move_minimax_val = nil, -2
+      
+      return get_end_game_val(board, depth, best_move_location) if is_game_over?(board) == true
+      return get_reached_max_depth_val(depth, best_move_location) if depth == (max_depth+1)
+      
+      if depth <= max_depth
+        board.num_total_spaces.times do |location|
+          if board.space_contents(location) == EMPTY
+            board.make_move(location, current_team(board))
+            @@stored_calc[:check_flag] = 0
+
+            current_space_minimax_val = minimax(board, depth+1, max_depth) * -1
+            board.make_move(location, EMPTY)
+            @@stored_calc[:check_flag] = 0
+
+            if current_space_minimax_val > best_move_minimax_val
+              best_move_minimax_val = current_space_minimax_val
+              best_move_location = location
+              if best_move_minimax_val == 1
+                return minimax_return_value(depth, 1, best_move_location)
+              end
+            end
+          end
+        end
+      end
+      
+      return minimax_return_value(depth, best_move_minimax_val, best_move_location)
+    end
+    
+    def get_end_game_val(board, depth, best_move_location)
+      if draw?(board) == true
+        return minimax_return_value(depth, 0, best_move_location)
+      else #Win
+        return minimax_return_value(depth, -1, best_move_location)
+      end
+    end
+    
+    def get_reached_max_depth_val(depth, best_move_location)
+      return minimax_return_value(depth, 0, best_move_location)
+    end
+    
+    def minimax_return_value(depth, minimax_val, location)
+      if depth == 0
+        return location
+      else
+        return minimax_val
+      end
     end
   end
 end

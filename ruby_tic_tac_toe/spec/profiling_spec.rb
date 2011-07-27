@@ -61,11 +61,15 @@ describe "profiling" do
     move.should >= 0
     @board.reset
     
-    @board.make_move(6,X)
-    Calculate.clear_previous_calculations
+    setup_opposite_corner_trap
     move = Calculate.best_move(@board)
-    move.should_not == 0
-    move.should_not == 8
+    move.should_not == 1
+    move.should_not == 3
+    move.should_not == 5
+    move.should_not == 7
+    move.should < @board.num_total_spaces
+    move.should >= 0
+    @board.reset
     
     result = RubyProf.stop
 
@@ -134,6 +138,12 @@ describe "profiling" do
     @board.make_move(1,X)
     @board.make_move(5,X)
     @board.make_move(4,O)
+    Calculate.clear_previous_calculations
+  end
+  
+  def setup_opposite_corner_trap
+    @board.make_move(0,X)
+    @board.make_move(8,O)
     Calculate.clear_previous_calculations
   end
 end
