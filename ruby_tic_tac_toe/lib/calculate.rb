@@ -52,16 +52,68 @@ class Calculate
         return O
       end
     end
-
-    def ai_best_move(board)
-      team = current_team(board)
-      wld = create_wld_array(board, team, team, 0)  # Create a win/loss/draw array
-      
-      # puts "--wld--"
-      # print_wld(wld, board)
-      
-      return calculate_best_move(board, wld)
+    
+    def best_move(board)
+      return minimax(board, 0)
     end
+    
+    def minimax(board, depth)
+      best_move_location, best_move_minimax_val, max_depth = nil, -2, 5
+      
+      if is_game_over?(board) == true
+        puts "Game Over"
+        puts ""
+        if draw?(board) == true
+          return minimax_return_value(depth, 0, best_move_location)
+        else #Win
+          return minimax_return_value(depth, -1, best_move_location)
+        end
+      end
+      if depth == max_depth+1
+        return minimax_return_value(depth, 0, best_move_location)
+      end
+      
+      if depth <= max_depth
+        board.num_total_spaces.times do |location|
+          if board.space_contents(location) == EMPTY
+            team = current_team(board)
+            board.make_move(location, current_team(board))
+            @@stored_calc[:check_flag] = 0
+            
+            puts "Making move to space: " + location.to_s + " at depth: " + depth.to_s + " with team: " + board.convert_space_val_to_graphic(team)
+            board.draw_board
+            
+            current_space_minimax_val = minimax(board, depth+1) * -1
+            puts "Value returned for space " + location.to_s + ": " + current_space_minimax_val.to_s + " at depth: " + depth.to_s
+            board.make_move(location, EMPTY)
+            @@stored_calc[:check_flag] = 0
+
+            if current_space_minimax_val > best_move_minimax_val
+              best_move_minimax_val = current_space_minimax_val
+              best_move_location = location
+              if best_move_minimax_val == 1
+                return minimax_return_value(depth, 1, best_move_location)
+              end
+            end
+          end
+        end
+      end
+      
+      puts "Board at depth: " + depth.to_s
+      board.draw_board
+      puts "Best Move value = " + best_move_minimax_val.to_s + " and location = " + best_move_location.to_s
+      puts ""
+      return minimax_return_value(depth, best_move_minimax_val, best_move_location)
+    end
+    
+    def minimax_return_value(depth, minimax_val, location)
+      if depth == 0
+        return location
+      else
+        return minimax_val
+      end
+    end
+
 
     private # The rest of the methods in this class are private
     
@@ -87,137 +139,15 @@ class Calculate
       return group_of_cells
     end
 
-    def create_wld_array(board, ai_team, cur_team, depth)
-      wld = Hash.new(0)
-      
-      if depth <= 3
-        board.num_total_spaces.times do |location|
-          wld[location] = 0
-          if board.space_contents(location) == EMPTY
-            wld, board = fill_out_wld_array(wld, board, location, ai_team, cur_team, depth)
-            wld = lookout_for_traps(wld, depth, board, ai_team, location)
-          end
-        end
-      end
-
-      return wld  # If the loop is over, return this depth's completed wld array
-    end
-    
-    def lookout_for_traps(wld, depth, board, ai_team, location)
-      if wld.values.inject{|sum,x| sum + x } == -2 && depth == 3 && ((board.space_contents(4) == ai_team && !(board.space_contents(7) == ai_team)) || (board.space_contents(4) == what_is_the_other_team(ai_team) && !(board.space_contents(6) == ai_team)))
-        wld[location] -= 99
-      end
-      
-      return wld
-    end
-
-    #TODO - break up into smaller method
-    def fill_out_wld_array(wld, board, location, ai_team, cur_team, depth)
-      @@stored_calc[:check_flag] = 0
-      board.make_move(location, current_team(board))  # Make a hypothetical move
-      # puts "Making Move at Depth: " + depth.to_s
-      # board.draw_board
-
-      if is_game_over?(board) == true
-        wld = update_wld(location, ai_team, board, wld, depth)
-        @@stored_calc[:check_flag] = 0
-        board.make_move(location, EMPTY)  # Take back hypothetical move
-        
-        # puts "WLD at depth: " + depth.to_s
-        # print_wld(wld, board)
-        
-        return [wld, board]
-      end
-
-      temp_array = create_wld_array(board, ai_team, current_team(board), depth+1)  # Recursively call ai_best_move at 1 more level of depth
-      wld = add_recursed_wld_vals(temp_array, wld, board, location)  # Add return value (array) of recursive call to wld array
-      @@stored_calc[:check_flag] = 0
-      board.make_move(location, EMPTY)  # Take back hypothetical move
-      
-      # puts "WLD at depth: " + depth.to_s
-      # print_wld(wld, board)
-      
-      return [wld, board]
-    end
-
-    def update_wld(location, ai_team, board, wld, depth)
-      if win?(board, ai_team) == true
-        wld = add_wld_points(WIN, location, depth, wld)
-      elsif win?(board, what_is_the_other_team(ai_team)) == true
-        wld = add_wld_points(LOSS, location, depth, wld)
-      end
-
-      return wld
-    end
-    
-    def add_wld_points(win_or_loss, location, depth, wld)
-      points = 0
-      case
-        when depth == 0 then points += 1111
-        when depth == 1 then points += 111
-        when depth == 2 then points += 11
-        when depth == 3 then points += 1
-      end
-      
-      if win_or_loss == LOSS
-        points *= -1
-      end
-
-      wld[location] += points
-      return wld
-    end
-
-    def add_recursed_wld_vals(temp_array, wld, board, location)
-      board.num_total_spaces.times do |i|
-        wld[location] += temp_array[i]
-      end
-
-      return wld
-    end
-
-    def calculate_best_move(board, wld)
-      best_move = nil
-      board.num_total_spaces.times do |location|
-        if board.space_contents(location) == EMPTY
-          best_move = set_a_default_value_if_it_hasnt_already_been_set(best_move, location)
-          best_move = find_a_move_better_than_the_default(board, wld, best_move, location)
-        end
-      end
-
-      return best_move
-    end
-
-    def set_a_default_value_if_it_hasnt_already_been_set(best_move, location)
-      if best_move == nil
-        best_move = location  # Makes sure that best move by default equals an empty space on the board
-      end
-
-      return best_move
-    end
-
-    def find_a_move_better_than_the_default(board, wld, best_move, location)
-      if location == 4
-        wld[location] += 1  # Give tie-breaker to center space
-      end
-      
-      if wld[location] > wld[best_move]
-        best_move = location
-      end
-
-      return best_move
-    end
-
     def check_board_for_win(board)
       group_of_cells = inspect_all_rows_cols_and_diags(board)
-      return return_value_of_check_for_win_method(group_of_cells)
-    end
-
-    def return_value_of_check_for_win_method(group_of_cells)
+      
       group_of_cells.length.times do |i|
         if group_of_cells[i][0] == "win"
           return group_of_cells[i][1]
         end
       end
+      
       return nil
     end
 
@@ -249,19 +179,6 @@ class Calculate
       end
 
       return ["nothing_interesting", 0]
-    end
-    
-    def print_wld(wld, board)
-      display_block = ""
-
-      board.num_total_spaces.times do |location|
-        display_block += "|" + wld[location].to_s
-        if (location % board.dim_cols) == (board.dim_cols - 1)
-          display_block += "|\n"
-        end
-      end
-
-      puts display_block
     end
   end
 end

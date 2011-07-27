@@ -104,7 +104,7 @@ class GameEngine
 
   def run_computers_turn(team)
     $stdout.puts "Please wait, computer thinking of next move..."
-    ai_move = Calculate.ai_best_move(@board)
+    ai_move = Calculate.best_move(@board)
 
     if @board.space_contents(ai_move) == EMPTY
       @board.make_move(ai_move, team)
