@@ -82,14 +82,12 @@ describe "profiling" do
     @board.make_move(0,X)
     @board.make_move(1,X)
     @board.make_move(4,O)
-    Calculate.clear_previous_calculations
   end
 
   def setup_x_win_on_col
     @board.make_move(0,X)
     @board.make_move(3,X)
     @board.make_move(4,O)
-    Calculate.clear_previous_calculations
   end
 
   def setup_o_win_on_forward_diag
@@ -98,7 +96,6 @@ describe "profiling" do
     @board.make_move(2,X)
     @board.make_move(4,O)
     @board.make_move(7,X)
-    Calculate.clear_previous_calculations
   end
 
   def setup_o_win_on_reverse_diag
@@ -107,7 +104,6 @@ describe "profiling" do
     @board.make_move(1,X)
     @board.make_move(4,O)
     @board.make_move(5,X)
-    Calculate.clear_previous_calculations
   end
 
   def setup_x_win_choose_best_empty_winner
@@ -117,33 +113,28 @@ describe "profiling" do
     @board.make_move(5,X)
     @board.make_move(7,X)
     @board.make_move(8,O)
-    Calculate.clear_previous_calculations
   end
 
   def setup_kiddie_corner_trap
     @board.make_move(2,X)
     @board.make_move(4,O)
     @board.make_move(6,X)
-    Calculate.clear_previous_calculations
   end
 
   def setup_triangle_trap
     @board.make_move(0,O)
     @board.make_move(4,X)
     @board.make_move(8,X)
-    Calculate.clear_previous_calculations
   end
 
   def setup_corner_trap
     @board.make_move(1,X)
     @board.make_move(5,X)
     @board.make_move(4,O)
-    Calculate.clear_previous_calculations
   end
   
   def setup_opposite_corner_trap
     @board.make_move(0,X)
     @board.make_move(8,O)
-    Calculate.clear_previous_calculations
   end
 end

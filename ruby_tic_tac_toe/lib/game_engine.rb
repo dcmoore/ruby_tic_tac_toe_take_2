@@ -108,7 +108,6 @@ class GameEngine
 
     if @board.space_contents(ai_move) == EMPTY
       @board.make_move(ai_move, team)
-      Calculate.clear_previous_calculations
       $stdout.puts "Computer moved to space: " + ai_move.to_s
     end
   end
@@ -119,7 +118,6 @@ class GameEngine
 
     if @board.space_contents(move) == EMPTY
       @board.make_move(move, team)
-      Calculate.clear_previous_calculations
       $stdout.puts "Move successfully made"
     else
       $stdout.puts "Cannot move to a space that is already full"
@@ -147,11 +145,11 @@ class GameEngine
 
 
   def game_over
-    if Calculate.win?(@board, X) == true
+    if Calculate.is_game_over?(@board) == X
       $stdout.puts "X wins!"
-    elsif Calculate.win?(@board, O) == true
+    elsif Calculate.is_game_over?(@board) == O
       $stdout.puts "O wins!"
-    elsif Calculate.draw?(@board) == true
+    elsif Calculate.is_game_over?(@board) == DRAW
       $stdout.puts "Draw"
     end
   end

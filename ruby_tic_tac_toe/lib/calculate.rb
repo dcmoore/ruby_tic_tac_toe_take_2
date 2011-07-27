@@ -2,12 +2,6 @@ require 'constants'
 
 class Calculate
   class << self
-    @@stored_calc = {:check_flag => 0, :igo => false, :drw => false, :xwn => false, :own => false}
-    
-    def clear_previous_calculations
-      @@stored_calc[:check_flag] = 0
-    end
-    
     def what_is_the_other_team(team)
       if team == X
         return O
@@ -19,29 +13,10 @@ class Calculate
     end
 
     def is_game_over?(board)
-      if @@stored_calc[:check_flag] == 0
-        evaluate_board(board)
-      end
-      return @@stored_calc[:igo]
-    end
-
-    def draw?(board)
-      if @@stored_calc[:check_flag] == 0
-        evaluate_board(board)
-      end
-      return @@stored_calc[:drw]
-    end
-
-    def win?(board, mark)
-      if @@stored_calc[:check_flag] == 0
-        evaluate_board(board)
-      end
-      
-      if mark == X
-        return @@stored_calc[:xwn]
-      else
-        return @@stored_calc[:own]
-      end
+      return X if (check_board_for_win(board) == X)
+      return O if (check_board_for_win(board) == O)
+      return DRAW if board.is_board_full?
+      return false
     end
 
     def current_team(board)
@@ -62,15 +37,6 @@ class Calculate
     end
 
     private # The rest of the methods in this class are private
-    
-    def evaluate_board(board)
-      # puts "Evaluating the Board"
-      @@stored_calc[:check_flag] = 1
-      @@stored_calc[:xwn] = (check_board_for_win(board) == X)
-      @@stored_calc[:own] = (check_board_for_win(board) == O)
-      @@stored_calc[:drw] = !win?(board, X) && !win?(board, O) && board.is_board_full?
-      @@stored_calc[:igo] = !(draw?(board) == false && win?(board, X) == false && win?(board, O) == false)
-    end
 
     def inspect_all_rows_cols_and_diags(board)
       group_of_cells = []
@@ -131,18 +97,16 @@ class Calculate
     def minimax(board, depth, max_depth)
       best_move_location, best_move_minimax_val = nil, -2
       
-      return get_end_game_val(board, depth, best_move_location) if is_game_over?(board) == true
+      return get_end_game_val(board, depth, best_move_location) if is_game_over?(board) != false
       return get_reached_max_depth_val(depth, best_move_location) if depth == (max_depth+1)
       
       if depth <= max_depth
         board.num_total_spaces.times do |location|
           if board.space_contents(location) == EMPTY
             board.make_move(location, current_team(board))
-            @@stored_calc[:check_flag] = 0
 
             current_space_minimax_val = minimax(board, depth+1, max_depth) * -1
             board.make_move(location, EMPTY)
-            @@stored_calc[:check_flag] = 0
 
             if current_space_minimax_val > best_move_minimax_val
               best_move_minimax_val = current_space_minimax_val
@@ -159,7 +123,7 @@ class Calculate
     end
     
     def get_end_game_val(board, depth, best_move_location)
-      if draw?(board) == true
+      if is_game_over?(board) == DRAW
         return minimax_return_value(depth, 0, best_move_location)
       else #Win
         return minimax_return_value(depth, -1, best_move_location)
