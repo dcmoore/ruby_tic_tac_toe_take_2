@@ -15,23 +15,23 @@ module Square
   
   def mouse_clicked(e)
     if id == "square0"
-      square0.text = ""
+      square0.text = "X"
     elsif id == "square1"
-      square1.text = ""
+      square1.text = "X"
     elsif id == "square2"
-      square2.text = ""
+      square2.text = "X"
     elsif id == "square3"
-      square3.text = ""
+      square3.text = "X"
     elsif id == "square4"
-      square4.text = ""
+      square4.text = "X"
     elsif id == "square5"
-      square5.text = ""
+      square5.text = "X"
     elsif id == "square6"
-      square6.text = ""
+      square6.text = "X"
     elsif id == "square7"
-      square7.text = ""
+      square7.text = "X"
     elsif id == "square8"
-      square8.text = ""
+      square8.text = "X"
     end
   end
 end

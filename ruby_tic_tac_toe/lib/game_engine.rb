@@ -6,7 +6,7 @@ require 'constants'
 
 
 class GameEngine
-  def initialize()
+    def initialize()
     @board = create_board
     create_players
     if @player1.type == "Computer" || @player2.type == "Computer"
