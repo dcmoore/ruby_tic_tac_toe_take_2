@@ -13,20 +13,35 @@ class GameEngine
 
 
   def create_board
-    $stdout.puts "size of @board will be 3 rows by 3 columns"
-    rows = 3
+    size = get_size_of_board
+    rows = size
     cols = rows
     @board = Board.new(rows, cols)
     return @board
+  end
+  
+  
+  def get_size_of_board
+    size = ""
+    while size != "1" && size != "2"
+      $stdout.puts "Select from the following board size choices (rows X columns):"
+      $stdout.puts " Enter \'1\' for 3X3"
+      $stdout.puts " Enter \'2\' for 4X4"
+      size = $stdin.gets.chomp
+    end
+    return 3 if size == "1"
+    return 4 if size == "2"
   end
 
 
   def create_players
     num_players = get_num_players
 
-    if num_players == 1
+    if num_players == "0"
+      player_factory("Computer", "Computer")
+    elsif num_players == "1"
       initialize_with_one_player
-    else
+    elsif num_players == "2"
       player_factory("Human", "Human")
     end
   end
@@ -51,9 +66,12 @@ class GameEngine
 
   def get_num_players
     num_players = 0
-    while num_players != 1 && num_players != 2
-      $stdout.puts "Number of players. 1 or 2?"
-      num_players = $stdin.gets.chomp.to_i
+    while num_players != "0" && num_players != "1" && num_players != "2"
+      $stdout.puts "Select from the following player options:"
+      $stdout.puts " Enter \'0\' for Computer vs Computer"
+      $stdout.puts " Enter \'1\' for Human vs Computer"
+      $stdout.puts " Enter \'2\' for Human vs Human"
+      num_players = $stdin.gets.chomp
     end
 
     return num_players

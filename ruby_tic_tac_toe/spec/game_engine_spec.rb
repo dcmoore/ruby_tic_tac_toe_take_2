@@ -6,7 +6,10 @@ describe GameEngine do
     @original_stdin, @original_stdout = $stdin, $stdout
     @myio_in, @myio_out = StringIO.new, StringIO.new
     $stdout = @myio_out
-    @initializers_output = "size of @board will be 3 rows by 3 columns\nNumber of players. 1 or 2?\nWhat team do you want to be on? X or O?\n"
+    select_board_size_output = "Select from the following board size choices (rows X columns):\n Enter '1' for 3X3\n Enter '2' for 4X4\n"
+    select_player_options_output = "Select from the following player options:\n Enter '0' for Computer vs Computer\n Enter '1' for Human vs Computer\n Enter '2' for Human vs Human\n"
+    choose_team_output = "What team do you want to be on? X or O?\n"
+    @initializers_output = select_board_size_output + select_player_options_output + choose_team_output
   end
   
   def start_game
@@ -20,27 +23,27 @@ describe GameEngine do
   end
   
   it "GameEngine.initialize calls methods that set the board size and player information." do
-    @myio_in.string = "1\nx"
+    @myio_in.string = "1\n1\nx"
     start_game
     @myio_out.string.should == @initializers_output
   end
   
   it "run_computers_turn(team) makes a move based off of what the Calculate class says would be the best move." do
-    @myio_in.string = "1\nO"
+    @myio_in.string = "1\n1\nO"
     start_game
     @my_game.run_computers_turn(X)
     @myio_out.string.should == @initializers_output + "Please wait, computer thinking of next move...\nComputer moved to space: 0\n"
   end
   
   it "run_humans_turn(team) makes a move based off of human input." do
-    @myio_in.string = "1\nX\n5"
+    @myio_in.string = "1\n1\nX\n5"
     start_game
     @my_game.run_humans_turn(X)
     @myio_out.string.should == @initializers_output + "type location of next move Ex. '0' for the top-left or '8' for the bottom-right\nMove successfully made\n"
   end
   
   it "validate_move(move) ensures that a valid move is being made" do
-    @myio_in.string = "1\nX\n00"
+    @myio_in.string = "1\n1\nX\n00"
     start_game
     @my_game.validate_move("99")
     @myio_out.string.should == @initializers_output + "Invalid Move\ntype location of next move Ex. '0' for the top-left or '8' for the bottom-right\n"
@@ -53,7 +56,7 @@ describe GameEngine do
   end
   
   def setup_draw
-    @myio_in.string = "1\nX\n0\n1\n2\n4\n3\n5\n7\n6\n8\n"
+    @myio_in.string = "1\n1\nX\n0\n1\n2\n4\n3\n5\n7\n6\n8\n"
     start_game
     @my_game.run_humans_turn(X)
     @my_game.run_humans_turn(O)

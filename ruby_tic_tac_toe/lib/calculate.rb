@@ -29,10 +29,20 @@ class Calculate
     end
     
     def best_move(board)
-      if board.num_moves_made == 0
-        return minimax(board, 0, 2)
-      else
-        return minimax(board, 0, 5)
+      if board.num_total_spaces == 9
+        if board.num_moves_made == 0
+          return minimax(board, 0, 2)
+        else
+          return minimax(board, 0, 5)
+        end
+      elsif board.num_total_spaces == 16
+        if board.num_moves_made < 5
+          return minimax(board, 0, 2)
+        elsif board.num_moves_made < 8
+          return minimax(board, 0, 3)
+        else
+          return minimax(board, 0, 5)
+        end
       end
     end
 
