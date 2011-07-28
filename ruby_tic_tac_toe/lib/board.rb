@@ -57,18 +57,6 @@ class Board
   end
 
 
-  # conventionally, you should overide the dup method
-  def dup
-    board_copy = Board.new(@dim_rows, @dim_cols)
-    
-    @spaces.each do |key, value|
-      board_copy.make_move(key, value)
-    end
-
-    return board_copy
-  end
-
-
   def num_moves_made
     return @spaces.length
   end

@@ -6,36 +6,37 @@ require 'ruby-prof'
 describe "profiling" do
   before do
     @board = Board.new(3, 3)
+    @difficulty = "Hard"
   end
   
-  it "self.best_move(Board) - returns an array containing the row and column of the best possible next move" do
+  it "self.best_move(Board, difficulty) - returns an array containing the row and column of the best possible next move at the specified difficulty" do
     RubyProf.start
     # Testing for 1st move
-    Calculate.best_move(@board).should == 0
+    Calculate.best_move(@board, @difficulty).should == 0
     @board.reset
     
     setup_x_win_on_row
-    Calculate.best_move(@board).should == 2
+    Calculate.best_move(@board, @difficulty).should == 2
     @board.reset
     
     setup_x_win_on_col
-    Calculate.best_move(@board).should == 6
+    Calculate.best_move(@board, @difficulty).should == 6
     @board.reset
     
     setup_o_win_on_forward_diag
-    Calculate.best_move(@board).should == 8
+    Calculate.best_move(@board, @difficulty).should == 8
     @board.reset
     
     setup_o_win_on_reverse_diag
-    Calculate.best_move(@board).should == 6
+    Calculate.best_move(@board, @difficulty).should == 6
     @board.reset
     
     setup_x_win_choose_best_empty_winner
-    Calculate.best_move(@board).should == 3
+    Calculate.best_move(@board, @difficulty).should == 3
     @board.reset
     
     setup_kiddie_corner_trap
-    move = Calculate.best_move(@board)
+    move = Calculate.best_move(@board, @difficulty)
     move.should_not == 0
     move.should_not == 8
     move.should < @board.num_total_spaces
@@ -43,7 +44,7 @@ describe "profiling" do
     @board.reset
     
     setup_triangle_trap
-    move = Calculate.best_move(@board)
+    move = Calculate.best_move(@board, @difficulty)
     move.should_not == 1
     move.should_not == 3
     move.should_not == 5
@@ -53,7 +54,7 @@ describe "profiling" do
     @board.reset
     
     setup_corner_trap
-    move = Calculate.best_move(@board)
+    move = Calculate.best_move(@board, @difficulty)
     move.should_not == 3
     move.should_not == 6
     move.should_not == 7
@@ -62,7 +63,7 @@ describe "profiling" do
     @board.reset
     
     setup_opposite_corner_trap
-    move = Calculate.best_move(@board)
+    move = Calculate.best_move(@board, @difficulty)
     move.should_not == 1
     move.should_not == 3
     move.should_not == 5

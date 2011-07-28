@@ -6,6 +6,7 @@
 # describe "random game simulations" do
 #   before do
 #     @board = Board.new(3,3)
+#     @difficulty = "Hard"
 #   end
 # 
 #   it "Testing the AI against random moves when the AI moves 1st" do
@@ -22,7 +23,7 @@
 #     while num_games != 0
 #       while Calculate.is_game_over?(@board) == false
 #         if Calculate.current_team(@board) == ai_team
-#           ai_move = Calculate.best_move(@board)
+#           ai_move = Calculate.best_move(@board, @difficulty)
 #           @board.make_move(ai_move, ai_team)
 #         else
 #           move = rand(@board.num_total_spaces)

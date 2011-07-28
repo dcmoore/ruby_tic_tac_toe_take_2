@@ -28,22 +28,10 @@ class Calculate
       end
     end
     
-    def best_move(board)
-      if board.num_total_spaces == 9
-        if board.num_moves_made == 0
-          return minimax(board, 0, 2)
-        else
-          return minimax(board, 0, 5)
-        end
-      elsif board.num_total_spaces == 16
-        if board.num_moves_made < 5
-          return minimax(board, 0, 2)
-        elsif board.num_moves_made < 8
-          return minimax(board, 0, 3)
-        else
-          return minimax(board, 0, 5)
-        end
-      end
+    def best_move(board, difficulty)
+      return easy_difficulty(board) if difficulty == "Easy"
+      return medium_difficulty(board) if difficulty == "Medium"
+      return hard_difficulty(board)
     end
 
     private # The rest of the methods in this class are private
@@ -101,6 +89,35 @@ class Calculate
       end
 
       return ["nothing_interesting", 0]
+    end
+    
+    def easy_difficulty(board)
+      return minimax(board, 0, 1)
+    end
+    
+    def medium_difficulty(board)
+      if board.num_total_spaces == 9
+        if board.num_moves_made != 0
+          return minimax(board, 0, 4)
+        end
+      end
+      return minimax(board, 0, 3)
+    end
+    
+    def hard_difficulty(board)
+      if board.num_total_spaces == 9
+        if board.num_moves_made == 0
+          return minimax(board, 0, 2)
+        else
+          return minimax(board, 0, 5)
+        end
+      elsif board.num_total_spaces == 16
+        if board.num_moves_made <= 6
+          return minimax(board, 0, 2)
+        else
+          return minimax(board, 0, 3)
+        end
+      end
     end
     
     #TODO - split into smaller methods

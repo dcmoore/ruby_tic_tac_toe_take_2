@@ -9,6 +9,24 @@ class GameEngine
   def initialize()
     @board = create_board
     create_players
+    if @player1.type == "Computer" || @player2.type == "Computer"
+      @difficulty = get_difficulty
+    end
+  end
+  
+  
+  def get_difficulty
+    diff = ""
+    while diff != "1" && diff != "2" && diff != "3"
+      $stdout.puts "Select from the following difficulty options:"
+      $stdout.puts " Enter \'1\' for Easy"
+      $stdout.puts " Enter \'2\' for Medium"
+      $stdout.puts " Enter \'3\' for Hard"
+      diff = $stdin.gets.chomp
+    end
+    return "Easy" if diff == "1"
+    return "Medium" if diff == "2"
+    return "Hard" if diff == "3"
   end
 
 
@@ -37,11 +55,11 @@ class GameEngine
   def create_players
     num_players = get_num_players
 
-    if num_players == "0"
+    if num_players == "1"
       player_factory("Computer", "Computer")
-    elsif num_players == "1"
-      initialize_with_one_player
     elsif num_players == "2"
+      initialize_with_one_player
+    elsif num_players == "3"
       player_factory("Human", "Human")
     end
   end
@@ -66,11 +84,11 @@ class GameEngine
 
   def get_num_players
     num_players = 0
-    while num_players != "0" && num_players != "1" && num_players != "2"
+    while num_players != "1" && num_players != "2" && num_players != "3"
       $stdout.puts "Select from the following player options:"
-      $stdout.puts " Enter \'0\' for Computer vs Computer"
-      $stdout.puts " Enter \'1\' for Human vs Computer"
-      $stdout.puts " Enter \'2\' for Human vs Human"
+      $stdout.puts " Enter \'1\' for Computer vs Computer"
+      $stdout.puts " Enter \'2\' for Human vs Computer"
+      $stdout.puts " Enter \'3\' for Human vs Human"
       num_players = $stdin.gets.chomp
     end
 
@@ -122,7 +140,7 @@ class GameEngine
 
   def run_computers_turn(team)
     $stdout.puts "Please wait, computer thinking of next move..."
-    ai_move = Calculate.best_move(@board)
+    ai_move = Calculate.best_move(@board, @difficulty)
 
     if @board.space_contents(ai_move) == EMPTY
       @board.make_move(ai_move, team)

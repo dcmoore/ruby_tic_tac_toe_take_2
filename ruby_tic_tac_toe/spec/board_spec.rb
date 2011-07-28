@@ -44,14 +44,6 @@ describe Board do
     @board.convert_space_val_to_graphic(O).should == "O"
   end
 
-  it "dup - returns a deep copy of the current board as a new object" do
-    make_3_moves
-    new_board = @board.dup
-    new_board.object_id.should_not == @board.object_id
-    @board.make_move(4, EMPTY)
-    new_board.space_contents(4).should == O
-  end
-
   it "num_moves_made - returns the number of moves that have been made on the board" do
     make_3_moves
     @board.num_moves_made.should == 3
