@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + "/spec_helper"
-require 'game_engine'
+require 'text_based_game'
 
-describe GameEngine do
+describe TextBasedGame do
   before do
     @original_stdin, @original_stdout = $stdin, $stdout
     @myio_in, @myio_out = StringIO.new, StringIO.new
@@ -15,7 +15,7 @@ describe GameEngine do
   
   def start_game
     $stdin = @myio_in
-    @my_game = GameEngine.new
+    @my_game = TextBasedGame.new
   end
   
   after do

@@ -92,32 +92,36 @@ class Calculate
     end
     
     def easy_difficulty(board)
-      return minimax(board, 0, 1)
+      return get_random_empty_space(board)
+    end
+    
+    def get_random_empty_space(board)
+      move = rand(board.num_total_spaces)
+      while board.space_contents(move) != EMPTY
+        move = rand(board.num_total_spaces)
+      end
+
+      return move
     end
     
     def medium_difficulty(board)
       if board.num_total_spaces == 9
-        if board.num_moves_made != 0
-          return minimax(board, 0, 4)
-        end
+        return minimax(board, 0, 4) if board.num_moves_made != 0
+      elsif board.num_total_spaces == 16
+        return minimax(board, 0, 1) if board.num_moves_made <= 6
       end
+      
       return minimax(board, 0, 3)
     end
     
     def hard_difficulty(board)
       if board.num_total_spaces == 9
-        if board.num_moves_made == 0
-          return minimax(board, 0, 2)
-        else
-          return minimax(board, 0, 5)
-        end
+        return minimax(board, 0, 5) if board.num_moves_made != 0
       elsif board.num_total_spaces == 16
-        if board.num_moves_made <= 6
-          return minimax(board, 0, 2)
-        else
-          return minimax(board, 0, 3)
-        end
+        return minimax(board, 0, 3) if board.num_moves_made >= 6
       end
+      
+      return minimax(board, 0, 2)
     end
     
     #TODO - split into smaller methods

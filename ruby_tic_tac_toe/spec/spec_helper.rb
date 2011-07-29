@@ -3,3 +3,5 @@ require 'rubygems'
 require 'rspec'
 require 'constants'
 require 'stringio'
+
+$TEST = true

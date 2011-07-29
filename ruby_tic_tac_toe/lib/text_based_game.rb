@@ -5,7 +5,7 @@ require 'player'
 require 'constants'
 
 
-class GameEngine
+class TextBasedGame
     def initialize()
     @board = create_board
     create_players
@@ -194,7 +194,7 @@ end
 
 # Run the game --------------------------------------------
 if __FILE__ == $0
-  game1 = GameEngine.new
+  game1 = TextBasedGame.new
   game1.runGame
   game1.game_over
 end
