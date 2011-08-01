@@ -1,75 +1,84 @@
 require File.expand_path(File.dirname(__FILE__) + "/spec_helper") 
 require 'board'
-require 'calculate'
+require 'player'
+require 'computer_player'
 require 'ruby-prof'
 
 describe "profiling" do
   before do
     @board = Board.new(3, 3)
     @difficulty = "Hard"
+    @ai_playerX = ComputerPlayer.new(X)
+    @ai_playerO = ComputerPlayer.new(O)
+    @original_stdout = $stdout
+    @myio_out = StringIO.new
+    $stdout = @myio_out
+  end
+  
+  after do
+    $stdout.close
+    $stdout = @original_stdout
   end
   
   it "self.best_move(Board, difficulty) - returns an array containing the row and column of the best possible next move at the specified difficulty" do
     RubyProf.start
     # Testing for 1st move
-    Calculate.best_move(@board, @difficulty).should == 0
+    @board = @ai_playerX.take_turn(@board, @difficulty)
+    @board.space_contents(0).should == X
     @board.reset
     
     setup_x_win_on_row
-    Calculate.best_move(@board, @difficulty).should == 2
+    @board = @ai_playerO.take_turn(@board, @difficulty)
+    @board.space_contents(2).should == O
     @board.reset
     
     setup_x_win_on_col
-    Calculate.best_move(@board, @difficulty).should == 6
+    @board = @ai_playerO.take_turn(@board, @difficulty)
+    @board.space_contents(6).should == O
     @board.reset
     
     setup_o_win_on_forward_diag
-    Calculate.best_move(@board, @difficulty).should == 8
+    @board = @ai_playerO.take_turn(@board, @difficulty)
+    @board.space_contents(8).should == O
     @board.reset
     
     setup_o_win_on_reverse_diag
-    Calculate.best_move(@board, @difficulty).should == 6
+    @board = @ai_playerO.take_turn(@board, @difficulty)
+    @board.space_contents(6).should == O
     @board.reset
     
     setup_x_win_choose_best_empty_winner
-    Calculate.best_move(@board, @difficulty).should == 3
+    @board = @ai_playerX.take_turn(@board, @difficulty)
+    @board.space_contents(3).should == X
     @board.reset
     
     setup_kiddie_corner_trap
-    move = Calculate.best_move(@board, @difficulty)
-    move.should_not == 0
-    move.should_not == 8
-    move.should < @board.num_total_spaces
-    move.should >= 0
+    @board = @ai_playerO.take_turn(@board, @difficulty)
+    @board.space_contents(0).should_not == O
+    @board.space_contents(8).should_not == O
     @board.reset
     
     setup_triangle_trap
-    move = Calculate.best_move(@board, @difficulty)
-    move.should_not == 1
-    move.should_not == 3
-    move.should_not == 5
-    move.should_not == 7
-    move.should < @board.num_total_spaces
-    move.should >= 0
+    @board = @ai_playerO.take_turn(@board, @difficulty)
+    @board.space_contents(1).should_not == O
+    @board.space_contents(3).should_not == O
+    @board.space_contents(5).should_not == O
+    @board.space_contents(7).should_not == O
     @board.reset
     
     setup_corner_trap
-    move = Calculate.best_move(@board, @difficulty)
-    move.should_not == 3
-    move.should_not == 6
-    move.should_not == 7
-    move.should < @board.num_total_spaces
-    move.should >= 0
+    @board = @ai_playerO.take_turn(@board, @difficulty)
+    @board.space_contents(3).should_not == O
+    @board.space_contents(6).should_not == O
+    @board.space_contents(7).should_not == O
     @board.reset
     
     setup_opposite_corner_trap
-    move = Calculate.best_move(@board, @difficulty)
-    move.should_not == 1
-    move.should_not == 3
-    move.should_not == 5
-    move.should_not == 7
-    move.should < @board.num_total_spaces
-    move.should >= 0
+    @board = @ai_playerO.take_turn(@board, @difficulty)
+    @board.space_contents(1).should_not == O
+    @board.space_contents(3).should_not == O
+    @board.space_contents(5).should_not == O
+    @board.space_contents(7).should_not == O
     @board.reset
     
     result = RubyProf.stop

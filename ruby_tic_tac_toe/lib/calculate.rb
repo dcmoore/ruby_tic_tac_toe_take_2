@@ -15,7 +15,7 @@ class Calculate
     def is_game_over?(board)
       return X if (check_board_for_win(board) == X)
       return O if (check_board_for_win(board) == O)
-      return DRAW if board.is_board_full?
+      return DRAW if is_board_full?(board)
       return false
     end
 
@@ -28,11 +28,6 @@ class Calculate
       end
     end
     
-    def best_move(board, difficulty)
-      return easy_difficulty(board) if difficulty == "Easy"
-      return medium_difficulty(board) if difficulty == "Medium"
-      return hard_difficulty(board)
-    end
 
     private # The rest of the methods in this class are private
 
@@ -91,86 +86,12 @@ class Calculate
       return ["nothing_interesting", 0]
     end
     
-    def easy_difficulty(board)
-      return get_random_empty_space(board)
-    end
-    
-    def get_random_empty_space(board)
-      move = rand(board.num_total_spaces)
-      while board.space_contents(move) != EMPTY
-        move = rand(board.num_total_spaces)
+    def is_board_full?(board)
+      if board.num_moves_made == board.num_total_spaces
+        return true
       end
 
-      return move
-    end
-    
-    def medium_difficulty(board)
-      if board.num_total_spaces == 9
-        return minimax(board, 0, 4) if board.num_moves_made != 0
-      elsif board.num_total_spaces == 16
-        return minimax(board, 0, 1) if board.num_moves_made <= 6
-      end
-      
-      return minimax(board, 0, 3)
-    end
-    
-    def hard_difficulty(board)
-      if board.num_total_spaces == 9
-        return minimax(board, 0, 5) if board.num_moves_made != 0
-      elsif board.num_total_spaces == 16
-        return minimax(board, 0, 3) if board.num_moves_made >= 6
-      end
-      
-      return minimax(board, 0, 2)
-    end
-    
-    #TODO - split into smaller methods
-    def minimax(board, depth, max_depth)
-      best_move_location, best_move_minimax_val = nil, -2
-      
-      return get_end_game_val(board, depth, best_move_location) if is_game_over?(board) != false
-      return get_reached_max_depth_val(depth, best_move_location) if depth == (max_depth+1)
-      
-      if depth <= max_depth
-        board.num_total_spaces.times do |location|
-          if board.space_contents(location) == EMPTY
-            board.make_move(location, current_team(board))
-
-            current_space_minimax_val = minimax(board, depth+1, max_depth) * -1
-            board.make_move(location, EMPTY)
-
-            if current_space_minimax_val > best_move_minimax_val
-              best_move_minimax_val = current_space_minimax_val
-              best_move_location = location
-              if best_move_minimax_val == 1
-                return minimax_return_value(depth, 1, best_move_location)
-              end
-            end
-          end
-        end
-      end
-      
-      return minimax_return_value(depth, best_move_minimax_val, best_move_location)
-    end
-    
-    def get_end_game_val(board, depth, best_move_location)
-      if is_game_over?(board) == DRAW
-        return minimax_return_value(depth, 0, best_move_location)
-      else #Win
-        return minimax_return_value(depth, -1, best_move_location)
-      end
-    end
-    
-    def get_reached_max_depth_val(depth, best_move_location)
-      return minimax_return_value(depth, 0, best_move_location)
-    end
-    
-    def minimax_return_value(depth, minimax_val, location)
-      if depth == 0
-        return location
-      else
-        return minimax_val
-      end
+      return false
     end
   end
 end

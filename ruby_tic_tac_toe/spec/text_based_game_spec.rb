@@ -33,22 +33,22 @@ describe TextBasedGame do
   it "run_computers_turn(team) makes a move based off of what the Calculate class says would be the best move." do
     @myio_in.string = "1\n2\nO\n3"
     start_game
-    @my_game.run_computers_turn(X)
-    @myio_out.string.should == @initializers_output_human_vs_comp + "Please wait, computer thinking of next move...\nComputer moved to space: 0\n"
+    @my_game.run_turn(X)
+    @myio_out.string.should == @initializers_output_human_vs_comp + "Please wait, computer thinking of next move...\nComputer moved to space: 1\n"
   end
   
   it "run_humans_turn(team) makes a move based off of human input." do
     @myio_in.string = "1\n2\nX\n3\n5"
     start_game
-    @my_game.run_humans_turn(X)
+    @my_game.run_turn(X)
     @myio_out.string.should == @initializers_output_human_vs_comp + "|1|2|3|\n|4|5|6|\n|7|8|9|\nSelect location of next move:\nMove successfully made\n"
   end
   
   it "validate_move(move) ensures that a valid move is being made" do
-    @myio_in.string = "1\n2\nX\n3\n00"
+    @myio_in.string = "1\n2\nX\n3\n99\n4"
     start_game
-    @my_game.validate_move("99")
-    @myio_out.string.should == @initializers_output_human_vs_comp + "Invalid Move\n|1|2|3|\n|4|5|6|\n|7|8|9|\n"
+    @my_game.run_turn(X)
+    @myio_out.string.should == @initializers_output_human_vs_comp + "|1|2|3|\n|4|5|6|\n|7|8|9|\nSelect location of next move:\n|1|2|3|\n|4|5|6|\n|7|8|9|\nInvalid Move. Please select another move:\nMove successfully made\n"
   end
   
   it "game_over ends the game and prints whether x won, o won, or nobody won" do
@@ -60,15 +60,15 @@ describe TextBasedGame do
   def setup_draw
     @myio_in.string = "1\n3\n1\n2\n3\n5\n4\n6\n8\n7\n9\n"
     start_game
-    @my_game.run_humans_turn(X)
-    @my_game.run_humans_turn(O)
-    @my_game.run_humans_turn(X)
-    @my_game.run_humans_turn(O)
-    @my_game.run_humans_turn(X)
-    @my_game.run_humans_turn(O)
-    @my_game.run_humans_turn(X)
-    @my_game.run_humans_turn(O)
-    @my_game.run_humans_turn(X)
+    @my_game.run_turn(X)
+    @my_game.run_turn(O)
+    @my_game.run_turn(X)
+    @my_game.run_turn(O)
+    @my_game.run_turn(X)
+    @my_game.run_turn(O)
+    @my_game.run_turn(X)
+    @my_game.run_turn(O)
+    @my_game.run_turn(X)
     @move_output_9 = "|1|2|3|\n|4|5|6|\n|7|8|9|\nSelect location of next move:\nMove successfully made\n|X|2|3|\n|4|5|6|\n|7|8|9|\nSelect location of next move:\nMove successfully made\n|X|O|3|\n|4|5|6|\n|7|8|9|\nSelect location of next move:\nMove successfully made\n|X|O|X|\n|4|5|6|\n|7|8|9|\nSelect location of next move:\nMove successfully made\n|X|O|X|\n|4|O|6|\n|7|8|9|\nSelect location of next move:\nMove successfully made\n|X|O|X|\n|X|O|6|\n|7|8|9|\nSelect location of next move:\nMove successfully made\n|X|O|X|\n|X|O|O|\n|7|8|9|\nSelect location of next move:\nMove successfully made\n|X|O|X|\n|X|O|O|\n|7|X|9|\nSelect location of next move:\nMove successfully made\n|X|O|X|\n|X|O|O|\n|O|X|9|\nSelect location of next move:\nMove successfully made\nDraw\n"
   end
 end

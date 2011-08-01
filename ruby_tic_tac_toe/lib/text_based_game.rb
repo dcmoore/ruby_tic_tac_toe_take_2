@@ -2,18 +2,58 @@ $: << File.dirname(__FILE__)
 require 'board'
 require 'calculate'
 require 'player'
+require 'human_player'
+require 'computer_player'
 require 'constants'
 
 
 class TextBasedGame
-    def initialize()
+  def initialize()
     @board = create_board
     create_players
-    if @player1.type == "Computer" || @player2.type == "Computer"
+    if @player1.class == TextComputerPlayer || @player2.class == TextComputerPlayer
       @difficulty = get_difficulty
     end
   end
   
+  def run_game
+    while Calculate.is_game_over?(@board) == false
+      if Calculate.current_team(@board) == X
+        run_turn(X)
+      else
+        run_turn(O)
+      end
+    end
+  end
+  
+  def run_turn(team)
+    if @player1.team == team
+      if @player1.class == TextHumanPlayer
+        @board = @player1.take_turn(@board)
+      elsif @player1.class == TextComputerPlayer
+        @board = @player1.take_turn(@board, @difficulty)
+      end
+    else
+      if @player2.class == TextHumanPlayer
+        @board = @player2.take_turn(@board)
+      elsif @player2.class == TextComputerPlayer
+        @board = @player2.take_turn(@board, @difficulty)
+      end
+    end
+  end
+  
+  def game_over
+    if Calculate.is_game_over?(@board) == X
+      $stdout.puts "X wins!"
+    elsif Calculate.is_game_over?(@board) == O
+      $stdout.puts "O wins!"
+    elsif Calculate.is_game_over?(@board) == DRAW
+      $stdout.puts "Draw"
+    end
+  end
+  
+  
+  private #------------------------------------------
   
   def get_difficulty
     diff = ""
@@ -53,34 +93,19 @@ class TextBasedGame
 
 
   def create_players
-    num_players = get_num_players
+    num_players_options = get_num_players
 
-    if num_players == "1"
-      player_factory("Computer", "Computer")
-    elsif num_players == "2"
+    if num_players_options == "1"
+      @player1 = TextComputerPlayer.new(X)
+      @player2 = TextComputerPlayer.new(O)
+    elsif num_players_options == "2"
       initialize_with_one_player
-    elsif num_players == "3"
-      player_factory("Human", "Human")
+    elsif num_players_options == "3"
+      @player1 = TextHumanPlayer.new(X)
+      @player2 = TextHumanPlayer.new(O)
     end
   end
-
-
-  def initialize_with_one_player
-    input = get_human_players_team
-
-    if input == "X" || input == "x"
-      player_factory("Human", "Computer")
-    else
-      player_factory("Computer", "Human")
-    end
-  end
-
-
-  def player_factory(p1, p2)
-    @player1 = Player.new(p1)
-    @player2 = Player.new(p2)
-  end
-
+  
 
   def get_num_players
     num_players = 0
@@ -96,6 +121,19 @@ class TextBasedGame
   end
 
 
+  def initialize_with_one_player
+    input = get_human_players_team
+
+    if input == "X" || input == "x"
+      @player1 = TextHumanPlayer.new(X)
+      @player2 = TextComputerPlayer.new(O)
+    else
+      @player1 = TextComputerPlayer.new(X)
+      @player2 = TextHumanPlayer.new(O)
+    end
+  end
+
+
   def get_human_players_team
     input = ""
     while input != "X" && input != "x" && input != "O" && input != "o"
@@ -105,113 +143,12 @@ class TextBasedGame
 
     return input
   end
-
-
-  def runGame
-    while Calculate.is_game_over?(@board) == false
-      if Calculate.current_team(@board) == X
-        run_xs_turn
-      else
-        run_os_turn
-      end
-    end
-  end
-
-
-  def run_xs_turn
-    if @player1.type == "Human"
-      run_humans_turn(X)
-    else
-      run_computers_turn(X)
-    end
-  end
-
-
-  def run_os_turn
-    if @player2.type == "Human"
-      run_humans_turn(O)
-    else
-      run_computers_turn(O)
-    end
-  end
-
-
-  def run_computers_turn(team)
-    $stdout.puts "Please wait, computer thinking of next move..."
-    ai_move = Calculate.best_move(@board, @difficulty)
-
-    if @board.space_contents(ai_move) == EMPTY
-      @board.make_move(ai_move, team)
-      $stdout.puts "Computer moved to space: " + ai_move.to_s
-    end
-  end
-
-
-  def run_humans_turn(team)
-    move = get_human_players_move
-
-    if @board.space_contents(move) == EMPTY
-      @board.make_move(move, team)
-      $stdout.puts "Move successfully made"
-    else
-      $stdout.puts "Cannot move to a space that is already full"
-    end
-  end
-
-
-  def get_human_players_move
-    print_board_with_empty_locations
-    $stdout.puts "Select location of next move:"
-    move = $stdin.gets.chomp.to_i - 1
-
-    return validate_move(move)
-  end
-  
-  
-  def print_board_with_empty_locations
-    display_block = ""
-    
-    @board.num_total_spaces.times do |location|
-      if @board.space_contents(location) == EMPTY
-        display_block += "|" + (location+1).to_s
-      else
-        display_block += "|" + @board.convert_space_val_to_graphic(@board.space_contents(location))
-      end
-      if (location % @board.dim_cols) == (@board.dim_cols - 1)
-        display_block += "|\n"
-      end
-    end
-    
-    puts display_block
-  end
-
-
-  def validate_move(move)
-    while !(move.to_i >= 0 && move.to_i < @board.num_total_spaces)
-      $stdout.puts "Invalid Move"
-      print_board_with_empty_locations
-      move = $stdin.gets.chomp
-    end
-
-    return move.to_i
-  end
-
-
-  def game_over
-    if Calculate.is_game_over?(@board) == X
-      $stdout.puts "X wins!"
-    elsif Calculate.is_game_over?(@board) == O
-      $stdout.puts "O wins!"
-    elsif Calculate.is_game_over?(@board) == DRAW
-      $stdout.puts "Draw"
-    end
-  end
 end
 
 
 # Run the game --------------------------------------------
 if __FILE__ == $0
   game1 = TextBasedGame.new
-  game1.runGame
+  game1.run_game
   game1.game_over
 end

@@ -1,7 +1,7 @@
 class Player
-  attr_reader :type
+  attr_reader :team
 
-  def initialize(a)
-    @type = a
+  def initialize(t)
+    @team = t
   end
 end

@@ -15,13 +15,24 @@ describe Board do
     @board.num_total_spaces.should == 9
   end
   
-  it "draw_board - outputs the board in its current state" do
+  it "print_board - outputs the board in its current state" do
     @original_stdout = $stdout
     myio_out = StringIO.new
     $stdout = myio_out
     make_3_moves
-    @board.draw_board
+    @board.print_board
     myio_out.string.should == "|X|X| |\n| |O| |\n| | | |\n"
+    $stdout.close
+    $stdout = @original_stdout
+  end
+  
+  it "print_board_with_empty_locations - outputs the board in its current state with locations where empty spaces are" do
+    @original_stdout = $stdout
+    myio_out = StringIO.new
+    $stdout = myio_out
+    make_3_moves
+    @board.print_board_with_empty_locations
+    myio_out.string.should == "|X|X|3|\n|4|O|6|\n|7|8|9|\n"
     $stdout.close
     $stdout = @original_stdout
   end
@@ -38,25 +49,10 @@ describe Board do
     @board.space_contents(4).should == EMPTY
   end
 
-  it "convert_space_val_to_graphic - graphically converts 0 to empty space, 1 to X, and 2 to O" do
-    @board.convert_space_val_to_graphic(EMPTY).should == " "
-    @board.convert_space_val_to_graphic(X).should == "X"
-    @board.convert_space_val_to_graphic(O).should == "O"
-  end
-
   it "num_moves_made - returns the number of moves that have been made on the board" do
     make_3_moves
     @board.num_moves_made.should == 3
     @board.reset
-  end
-
-  it "is_board_full?(board)" do
-    make_9_moves
-    @board.is_board_full? == true
-    @board.reset
-
-    make_3_moves
-    @board.is_board_full? == false
   end
 
   it "dim_rows - returns the number of rows in the board" do
@@ -65,14 +61,6 @@ describe Board do
 
   it "dim_cols - returns the number of columns in the board" do
     @board.dim_cols.should == 3
-  end
-  
-  it "spaces - should return the hash representing the current" do
-    make_3_moves
-    arr = [X, X, EMPTY, EMPTY, O, EMPTY, EMPTY, EMPTY, EMPTY]
-    @board.spaces.each do |location, team|
-      @board.space_contents(location).should == arr[location]
-    end
   end
 
 
