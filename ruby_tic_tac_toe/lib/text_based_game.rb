@@ -114,8 +114,6 @@ class TextBasedGame
       else
         run_os_turn
       end
-
-      @board.draw_board
     end
   end
 
@@ -162,17 +160,36 @@ class TextBasedGame
 
 
   def get_human_players_move
-    $stdout.puts "type location of next move Ex. '0' for the top-left or '8' for the bottom-right"
-    move = $stdin.gets.chomp
+    print_board_with_empty_locations
+    $stdout.puts "Select location of next move:"
+    move = $stdin.gets.chomp.to_i - 1
 
     return validate_move(move)
+  end
+  
+  
+  def print_board_with_empty_locations
+    display_block = ""
+    
+    @board.num_total_spaces.times do |location|
+      if @board.space_contents(location) == EMPTY
+        display_block += "|" + (location+1).to_s
+      else
+        display_block += "|" + @board.convert_space_val_to_graphic(@board.space_contents(location))
+      end
+      if (location % @board.dim_cols) == (@board.dim_cols - 1)
+        display_block += "|\n"
+      end
+    end
+    
+    puts display_block
   end
 
 
   def validate_move(move)
-    while !(move.to_i < @board.num_total_spaces)
+    while !(move.to_i >= 0 && move.to_i < @board.num_total_spaces)
       $stdout.puts "Invalid Move"
-      $stdout.puts "type location of next move Ex. '0' for the top-left or '8' for the bottom-right"
+      print_board_with_empty_locations
       move = $stdin.gets.chomp
     end
 
