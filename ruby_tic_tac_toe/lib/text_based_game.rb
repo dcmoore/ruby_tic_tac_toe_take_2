@@ -14,10 +14,11 @@ class TextBasedGame
     if @player1.class == TextComputerPlayer || @player2.class == TextComputerPlayer
       @difficulty = get_difficulty
     end
+    @rules = get_rules
   end
   
   def run_game
-    while Calculate.is_game_over?(@board) == false
+    while Calculate.is_game_over?(@board, @rules) == false
       @board.print_board_with_empty_locations
       if Calculate.current_team(@board) == @player1.team
         run_turn(@player1)
@@ -31,17 +32,18 @@ class TextBasedGame
     if player.class == TextHumanPlayer
       @board = player.take_turn(@board)
     elsif player.class == TextComputerPlayer
-      @board = player.take_turn(@board, @difficulty)
+      @board = player.take_turn(@board, @difficulty, @rules)
     end
   end
   
   def game_over
     @board.print_board_with_empty_locations
-    if Calculate.is_game_over?(@board) == X
+    who_won = Calculate.is_game_over?(@board, @rules)
+    if who_won == X
       $stdout.puts "X wins!"
-    elsif Calculate.is_game_over?(@board) == O
+    elsif who_won == O
       $stdout.puts "O wins!"
-    elsif Calculate.is_game_over?(@board) == DRAW
+    elsif who_won == DRAW
       $stdout.puts "Draw"
     end
   end
@@ -130,6 +132,18 @@ class TextBasedGame
     return "Easy" if diff == "1"
     return "Medium" if diff == "2"
     return "Hard" if diff == "3"
+  end
+  
+  def get_rules
+    rules = ""
+    while rules != "1" && rules != "2"
+      $stdout.puts "Select from the following game rules:"
+      $stdout.puts " Enter '1' for standard rules (win by controlling 3 spaces in a row)"
+      $stdout.puts " Enter '2' for 2X2 rules (win by controlling a 2X2 block of spaces or 3 in a row)"
+      rules = $stdin.gets.chomp
+    end
+    return "rows_cols_diags" if rules == "1"
+    return "rows_cols_diags_blocks" if rules == "2"
   end
 end
 

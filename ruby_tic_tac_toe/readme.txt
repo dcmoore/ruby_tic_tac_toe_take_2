@@ -20,5 +20,5 @@ Player
     GUIComputerPlayer
 Calculate
   -self.what_is_the_other_team(team) - returns the team that just moved
-  -self.is_game_over?(Board) - returns 1 if x won, 2 if o won, 5 if it is a draw, and false if none of that
+  -self.is_game_over?(Board, rules) - returns 1 if x won, 2 if o won, 5 if it is a draw, and false if none of that
   -self.current_team(Board) - returns the team who is next in line to make a move

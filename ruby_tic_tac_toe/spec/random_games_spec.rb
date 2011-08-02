@@ -7,6 +7,7 @@
 #   before do
 #     @board = Board.new(3,3)
 #     @difficulty = "Hard"
+#     @rules = "rows_cols_diags"
 #   end
 # 
 #   it "Testing the AI against random moves when the AI moves 1st" do
@@ -21,7 +22,7 @@
 #     fail_flag, num_fails = false, 0
 #     
 #     while num_games != 0
-#       while Calculate.is_game_over?(@board) == false
+#       while Calculate.is_game_over?(@board, @rules) == false
 #         if Calculate.current_team(@board) == ai_team
 #           ai_move = Calculate.best_move(@board, @difficulty)
 #           @board.make_move(ai_move, ai_team)
@@ -34,7 +35,7 @@
 #           @board.make_move(move, rand_team)
 #         end
 # 
-#         if Calculate.is_game_over?(@board) == rand_team
+#         if Calculate.is_game_over?(@board, @rules) == rand_team
 #           fail_flag = true
 #         end
 #       end

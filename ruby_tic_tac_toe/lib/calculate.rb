@@ -14,15 +14,16 @@ class Calculate
       end
     end
 
-    def is_game_over?(board)
+    def is_game_over?(board, rules)
       @@board = board
-      return X if (check_board_for_win == X)
-      return O if (check_board_for_win == O)
+      return X if (check_board_for_win(rules) == X)
+      return O if (check_board_for_win(rules) == O)
       return DRAW if is_board_full?
       return false
     end
 
     def current_team(board)
+      @@board = board
       current_turn = board.num_moves_made
       if current_turn % 2 == 0
         return X
@@ -34,16 +35,19 @@ class Calculate
 
     private # The rest of the methods in this class are private
 
-    def check_board_for_win
-      return check_cell_groups_for_win(get_winning_combiniations_of_cells)
+    def check_board_for_win(rules)
+      return check_cell_groups_for_win(get_winning_combiniations_of_cells(rules))
     end
         
-    def get_winning_combiniations_of_cells
+    def get_winning_combiniations_of_cells(rules)
       group_of_cells = []
 
       group_of_cells.concat(get_all_row_and_column_combinations)
       group_of_cells.concat(get_all_diagonal_combinations)
-      group_of_cells.concat(get_all_block_combinations)
+      
+      if rules == "rows_cols_diags_blocks"
+        group_of_cells.concat(get_all_block_combinations)
+      end
       
       return group_of_cells
     end

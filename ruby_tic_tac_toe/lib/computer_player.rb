@@ -2,15 +2,15 @@ require 'constants'
 require 'calculate'
 
 class ComputerPlayer < Player
-  def take_turn(board, difficulty)
+  def take_turn(board, difficulty, rules)
     $stdout.puts "Please wait, computer thinking of next move..."
     ai_move = ""
     if difficulty == "Easy"
       ai_move = easy_difficulty(board)
     elsif difficulty == "Medium"
-      ai_move = medium_difficulty(board)
+      ai_move = medium_difficulty(board, rules)
     else
-      ai_move = hard_difficulty(board)
+      ai_move = hard_difficulty(board, rules)
     end
     
     if board.space_contents(ai_move) == EMPTY
@@ -37,31 +37,31 @@ class ComputerPlayer < Player
     return move
   end
   
-  def medium_difficulty(board)
+  def medium_difficulty(board, rules)
     if board.num_total_spaces == 9
-      return minimax(board, 0, 4) if board.num_moves_made != 0
+      return minimax(board, 0, 4, rules) if board.num_moves_made != 0
     elsif board.num_total_spaces == 16
-      return minimax(board, 0, 1) if board.num_moves_made <= 6
+      return minimax(board, 0, 1, rules) if board.num_moves_made <= 6
     end
     
-    return minimax(board, 0, 3)
+    return minimax(board, 0, 3, rules)
   end
   
-  def hard_difficulty(board)
+  def hard_difficulty(board, rules)
     if board.num_total_spaces == 9
-      return minimax(board, 0, 5) if board.num_moves_made != 0
+      return minimax(board, 0, 5, rules) if board.num_moves_made != 0
     elsif board.num_total_spaces == 16
-      return minimax(board, 0, 3) if board.num_moves_made >= 6
+      return minimax(board, 0, 3, rules) if board.num_moves_made >= 6
     end
     
-    return minimax(board, 0, 2)
+    return minimax(board, 0, 2, rules)
   end
   
   #TODO - split into smaller methods
-  def minimax(board, depth, max_depth)
+  def minimax(board, depth, max_depth, rules)
     best_move_location, best_move_minimax_val = nil, -2
     
-    return get_end_game_val(board, depth, best_move_location) if Calculate.is_game_over?(board) != false
+    return get_end_game_val(board, depth, best_move_location, rules) if Calculate.is_game_over?(board, rules) != false
     return get_reached_max_depth_val(depth, best_move_location) if depth == (max_depth+1)
     
     if depth <= max_depth
@@ -69,7 +69,7 @@ class ComputerPlayer < Player
         if board.space_contents(location) == EMPTY
           board.make_move(location, Calculate.current_team(board))
 
-          current_space_minimax_val = minimax(board, depth+1, max_depth) * -1
+          current_space_minimax_val = minimax(board, depth+1, max_depth, rules) * -1
           board.make_move(location, EMPTY)
 
           if current_space_minimax_val > best_move_minimax_val
@@ -86,8 +86,8 @@ class ComputerPlayer < Player
     return minimax_return_value(depth, best_move_minimax_val, best_move_location)
   end
   
-  def get_end_game_val(board, depth, best_move_location)
-    if Calculate.is_game_over?(board) == DRAW
+  def get_end_game_val(board, depth, best_move_location, rules)
+    if Calculate.is_game_over?(board, rules) == DRAW
       return minimax_return_value(depth, 0, best_move_location)
     else #Win
       return minimax_return_value(depth, -1, best_move_location)
