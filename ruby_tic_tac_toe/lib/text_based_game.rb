@@ -86,16 +86,10 @@ class TextBasedGame
   end
   
   def get_num_players
-    num_players = 0
-    while num_players != "1" && num_players != "2" && num_players != "3"
-      $stdout.puts "Select from the following player options:"
-      $stdout.puts " Enter \'1\' for Computer vs Computer"
-      $stdout.puts " Enter \'2\' for Human vs Computer"
-      $stdout.puts " Enter \'3\' for Human vs Human"
-      num_players = $stdin.gets.chomp
-    end
+    prompt = "Select from the following player options:\n Enter '1' for Computer vs Computer\n Enter '2' for Human vs Computer\n Enter '3' for Human vs Human\n"
+    possible_values = ["1", "2", "3"]
 
-    return num_players
+    return get_input(prompt, possible_values)
   end
 
   def initialize_with_one_player
@@ -121,29 +115,35 @@ class TextBasedGame
   end
   
   def get_difficulty
-    diff = ""
-    while diff != "1" && diff != "2" && diff != "3"
-      $stdout.puts "Select from the following difficulty options:"
-      $stdout.puts " Enter \'1\' for Easy"
-      $stdout.puts " Enter \'2\' for Medium"
-      $stdout.puts " Enter \'3\' for Hard"
-      diff = $stdin.gets.chomp
-    end
+    prompt = "Select from the following difficulty options:\n Enter '1' for Easy\n Enter '2' for Medium\n Enter '3' for Hard\n"
+    possible_values = ["1", "2", "3"]
+
+    diff =  get_input(prompt, possible_values)
+
     return "Easy" if diff == "1"
     return "Medium" if diff == "2"
     return "Hard" if diff == "3"
   end
   
   def get_rules
-    rules = ""
-    while rules != "1" && rules != "2"
-      $stdout.puts "Select from the following game rules:"
-      $stdout.puts " Enter '1' for standard rules (win by controlling 3 spaces in a row)"
-      $stdout.puts " Enter '2' for 2X2 rules (win by controlling a 2X2 block of spaces or 3 in a row)"
-      rules = $stdin.gets.chomp
-    end
+    prompt = "Select from the following game rules:\n Enter '1' for standard rules (win by controlling 3 spaces in a row)\n Enter '2' for 2X2 rules (win by controlling a 2X2 block of spaces or 3 in a row)\n"
+    possible_values = ["1", "2", "2"]
+
+    rules =  get_input(prompt, possible_values)
+
     return "rows_cols_diags" if rules == "1"
     return "rows_cols_diags_blocks" if rules == "2"
+  end
+  
+  def get_input(prompt, possible_values)
+    val = ""
+    
+    while val != possible_values[0] && val != possible_values[1] && val != possible_values[2]
+      $stdout.puts prompt
+      val = $stdin.gets.chomp
+    end
+    
+    return val
   end
 end
 

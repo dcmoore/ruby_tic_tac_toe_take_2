@@ -17,6 +17,8 @@ describe TextBasedGame do
   
   def start_game
     $stdin = @myio_in
+    @p1 = TextHumanPlayer.new(X)
+    @p2 = TextHumanPlayer.new(O)
     @my_game = TextBasedGame.new
   end
   
@@ -55,21 +57,21 @@ describe TextBasedGame do
   it "game_over ends the game and prints whether x won, o won, or nobody won" do
     setup_draw
     @my_game.game_over
-    @myio_out.string.should == @initializers_output_human_vs_human + "|1|2|3|\n|4|5|6|\n|7|8|9|\n"
+    @myio_out.string.should == @initializers_output_human_vs_human + @move_output_9
   end
   
   def setup_draw
-    @myio_in.string = "1\n3\n1\n1\n2\n3\n5\n4\n6\n8\n7\n9\n"
+    @myio_in.string = "1\n3\n1\n1\n2\n2\n99\n3\n5\n4\n6\n8\n7\n9\n"
     start_game
-    @my_game.run_turn(X)
-    @my_game.run_turn(O)
-    @my_game.run_turn(X)
-    @my_game.run_turn(O)
-    @my_game.run_turn(X)
-    @my_game.run_turn(O)
-    @my_game.run_turn(X)
-    @my_game.run_turn(O)
-    @my_game.run_turn(X)
-    @move_output_9 = "|1|2|3|\n|4|5|6|\n|7|8|9|\nSelect location of next move:\nMove successfully made\n|X|2|3|\n|4|5|6|\n|7|8|9|\nSelect location of next move:\nMove successfully made\n|X|O|3|\n|4|5|6|\n|7|8|9|\nSelect location of next move:\nMove successfully made\n|X|O|X|\n|4|5|6|\n|7|8|9|\nSelect location of next move:\nMove successfully made\n|X|O|X|\n|4|O|6|\n|7|8|9|\nSelect location of next move:\nMove successfully made\n|X|O|X|\n|X|O|6|\n|7|8|9|\nSelect location of next move:\nMove successfully made\n|X|O|X|\n|X|O|O|\n|7|8|9|\nSelect location of next move:\nMove successfully made\n|X|O|X|\n|X|O|O|\n|7|X|9|\nSelect location of next move:\nMove successfully made\n|X|O|X|\n|X|O|O|\n|O|X|9|\nSelect location of next move:\nMove successfully made\nDraw\n"
+    @my_game.run_turn(@p1)
+    @my_game.run_turn(@p2)
+    @my_game.run_turn(@p1)
+    @my_game.run_turn(@p2)
+    @my_game.run_turn(@p1)
+    @my_game.run_turn(@p2)
+    @my_game.run_turn(@p1)
+    @my_game.run_turn(@p2)
+    @my_game.run_turn(@p1)
+    @move_output_9 = "Select location of next move:\nMove successfully made\nSelect location of next move:\nMove successfully made\nSelect location of next move:\nCannot move to a space that is already full\nSelect location of next move:\n|X|O|3|\n|4|5|6|\n|7|8|9|\nInvalid Move. Please select another move:\nMove successfully made\nSelect location of next move:\nMove successfully made\nSelect location of next move:\nMove successfully made\nSelect location of next move:\nMove successfully made\nSelect location of next move:\nMove successfully made\nSelect location of next move:\nMove successfully made\n|X|O|O|\n|O|X|X|\n|X|O|9|\n"
   end
 end

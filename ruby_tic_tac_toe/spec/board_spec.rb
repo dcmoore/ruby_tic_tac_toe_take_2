@@ -63,19 +63,6 @@ describe Board do
     @board.dim_cols.should == 3
   end
 
-
-  def make_9_moves
-    @board.make_move(0,X)
-    @board.make_move(1,O)
-    @board.make_move(2,X)
-    @board.make_move(3,O)
-    @board.make_move(4,X)
-    @board.make_move(5,O)
-    @board.make_move(6,X)
-    @board.make_move(7,O)
-    @board.make_move(8,X)
-  end
-
   def make_3_moves
     @board.make_move(0,X)
     @board.make_move(1,X)
