@@ -47,16 +47,22 @@ class Board
     
     num_total_spaces.times do |location|
       if show_locations == true && space_contents(location) == EMPTY
-        display_block += "|" + (location+1).to_s
+        display_block += get_formatted_line_spacing(false, location+1) + (location+1).to_s
       else
-        display_block += "|" + convert_space_val_to_graphic(@spaces[location])
+        display_block += get_formatted_line_spacing(false, 0) + convert_space_val_to_graphic(@spaces[location])
       end
       if (location % @dim_cols) == (@dim_cols - 1)
-        display_block += "|\n"
+        display_block += get_formatted_line_spacing(true, 0)
       end
     end
     
     return display_block
+  end
+  
+  def get_formatted_line_spacing(is_end, location)
+    return "|\n" if is_end == true
+    return "| " if @dim_rows > 3 && location < 10
+    return "|"
   end
 
   def convert_space_val_to_graphic(team)
