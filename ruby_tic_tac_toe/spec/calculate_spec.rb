@@ -16,7 +16,7 @@ describe Calculate do
     setup_x_win_on_full_board
     Calculate.is_game_over?(@board).should_not == false
     @board.reset
-
+    
     setup_x_win_on_full_board
     Calculate.is_game_over?(@board).should == X
     @board.reset
@@ -40,13 +40,13 @@ describe Calculate do
 
   def setup_draw
     @board.make_move(0,X)
-    @board.make_move(1,X)
-    @board.make_move(2,O)
+    @board.make_move(1,O)
+    @board.make_move(2,X)
     @board.make_move(3,O)
-    @board.make_move(4,X)
+    @board.make_move(4,O)
     @board.make_move(5,X)
     @board.make_move(6,X)
-    @board.make_move(7,O)
+    @board.make_move(7,X)
     @board.make_move(8,O)
   end
 

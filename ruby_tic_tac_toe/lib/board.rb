@@ -6,21 +6,21 @@ class Board
     @dim_cols = cols
     @spaces = Hash.new(EMPTY)
   end
-
-  def reset
-    @spaces.clear
-  end
-
-  def space_contents(location)
-    return @spaces[location]
-  end
-
+  
   def make_move(location, team)
     if team == EMPTY
       @spaces.delete(location)
     else
       @spaces[location] = team
     end
+  end
+
+  def space_contents(location)
+    return @spaces[location]
+  end
+  
+  def reset
+    @spaces.clear
   end
   
   def num_total_spaces
@@ -58,7 +58,6 @@ class Board
     
     return display_block
   end
-
 
   def convert_space_val_to_graphic(team)
     if team == 1

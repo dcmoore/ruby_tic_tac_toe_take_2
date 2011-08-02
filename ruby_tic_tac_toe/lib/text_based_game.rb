@@ -48,21 +48,6 @@ class TextBasedGame
   
   
   private #------------------------------------------
-  
-  def get_difficulty
-    diff = ""
-    while diff != "1" && diff != "2" && diff != "3"
-      $stdout.puts "Select from the following difficulty options:"
-      $stdout.puts " Enter \'1\' for Easy"
-      $stdout.puts " Enter \'2\' for Medium"
-      $stdout.puts " Enter \'3\' for Hard"
-      diff = $stdin.gets.chomp
-    end
-    return "Easy" if diff == "1"
-    return "Medium" if diff == "2"
-    return "Hard" if diff == "3"
-  end
-
 
   def create_board
     size = get_size_of_board
@@ -71,7 +56,6 @@ class TextBasedGame
     @board = Board.new(rows, cols)
     return @board
   end
-  
   
   def get_size_of_board
     size = ""
@@ -84,7 +68,6 @@ class TextBasedGame
     return 3 if size == "1"
     return 4 if size == "2"
   end
-
 
   def create_players
     num_players_options = get_num_players
@@ -100,7 +83,6 @@ class TextBasedGame
     end
   end
   
-
   def get_num_players
     num_players = 0
     while num_players != "1" && num_players != "2" && num_players != "3"
@@ -114,7 +96,6 @@ class TextBasedGame
     return num_players
   end
 
-
   def initialize_with_one_player
     input = get_human_players_team
 
@@ -127,7 +108,6 @@ class TextBasedGame
     end
   end
 
-
   def get_human_players_team
     input = ""
     while input != "X" && input != "x" && input != "O" && input != "o"
@@ -136,6 +116,20 @@ class TextBasedGame
     end
 
     return input
+  end
+  
+  def get_difficulty
+    diff = ""
+    while diff != "1" && diff != "2" && diff != "3"
+      $stdout.puts "Select from the following difficulty options:"
+      $stdout.puts " Enter \'1\' for Easy"
+      $stdout.puts " Enter \'2\' for Medium"
+      $stdout.puts " Enter \'3\' for Hard"
+      diff = $stdin.gets.chomp
+    end
+    return "Easy" if diff == "1"
+    return "Medium" if diff == "2"
+    return "Hard" if diff == "3"
   end
 end
 
