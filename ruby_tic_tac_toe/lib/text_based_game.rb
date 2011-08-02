@@ -18,31 +18,25 @@ class TextBasedGame
   
   def run_game
     while Calculate.is_game_over?(@board) == false
-      if Calculate.current_team(@board) == X
-        run_turn(X)
+      @board.print_board_with_empty_locations
+      if Calculate.current_team(@board) == @player1.team
+        run_turn(@player1)
       else
-        run_turn(O)
+        run_turn(@player2)
       end
     end
   end
   
-  def run_turn(team)
-    if @player1.team == team
-      if @player1.class == TextHumanPlayer
-        @board = @player1.take_turn(@board)
-      elsif @player1.class == TextComputerPlayer
-        @board = @player1.take_turn(@board, @difficulty)
-      end
-    else
-      if @player2.class == TextHumanPlayer
-        @board = @player2.take_turn(@board)
-      elsif @player2.class == TextComputerPlayer
-        @board = @player2.take_turn(@board, @difficulty)
-      end
+  def run_turn(player)
+    if player.class == TextHumanPlayer
+      @board = player.take_turn(@board)
+    elsif player.class == TextComputerPlayer
+      @board = player.take_turn(@board, @difficulty)
     end
   end
   
   def game_over
+    @board.print_board_with_empty_locations
     if Calculate.is_game_over?(@board) == X
       $stdout.puts "X wins!"
     elsif Calculate.is_game_over?(@board) == O

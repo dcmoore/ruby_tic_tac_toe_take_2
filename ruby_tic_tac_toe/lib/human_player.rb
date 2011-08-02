@@ -5,7 +5,6 @@ end
 
 class TextHumanPlayer < HumanPlayer
   def take_turn(board)
-    board.print_board_with_empty_locations
     $stdout.puts "Select location of next move:"
     move = $stdin.gets.chomp.to_i - 1
     move = validate_move(board, move)

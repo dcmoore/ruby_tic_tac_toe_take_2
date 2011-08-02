@@ -34,27 +34,27 @@ describe TextBasedGame do
     @myio_in.string = "1\n2\nO\n3"
     start_game
     @my_game.run_turn(X)
-    @myio_out.string.should == @initializers_output_human_vs_comp + "Please wait, computer thinking of next move...\nComputer moved to space: 1\n"
+    @myio_out.string.should == @initializers_output_human_vs_comp
   end
   
   it "run_humans_turn(team) makes a move based off of human input." do
     @myio_in.string = "1\n2\nX\n3\n5"
     start_game
     @my_game.run_turn(X)
-    @myio_out.string.should == @initializers_output_human_vs_comp + "|1|2|3|\n|4|5|6|\n|7|8|9|\nSelect location of next move:\nMove successfully made\n"
+    @myio_out.string.should == @initializers_output_human_vs_comp
   end
   
   it "validate_move(move) ensures that a valid move is being made" do
     @myio_in.string = "1\n2\nX\n3\n99\n4"
     start_game
     @my_game.run_turn(X)
-    @myio_out.string.should == @initializers_output_human_vs_comp + "|1|2|3|\n|4|5|6|\n|7|8|9|\nSelect location of next move:\n|1|2|3|\n|4|5|6|\n|7|8|9|\nInvalid Move. Please select another move:\nMove successfully made\n"
+    @myio_out.string.should == @initializers_output_human_vs_comp
   end
   
   it "game_over ends the game and prints whether x won, o won, or nobody won" do
     setup_draw
     @my_game.game_over
-    @myio_out.string.should == @initializers_output_human_vs_human + @move_output_9
+    @myio_out.string.should == @initializers_output_human_vs_human + "|1|2|3|\n|4|5|6|\n|7|8|9|\n"
   end
   
   def setup_draw
