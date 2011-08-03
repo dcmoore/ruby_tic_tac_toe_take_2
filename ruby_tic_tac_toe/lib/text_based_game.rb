@@ -9,11 +9,11 @@ require 'constants'
 
 class TextBasedGame
   def initialize()
-    @board = create_and_return_board
     create_players
     if @player1.class == TextComputerPlayer || @player2.class == TextComputerPlayer
       @difficulty = get_difficulty
     end
+    @board = create_and_return_board
     @rules = get_rules
   end
   
@@ -58,6 +58,66 @@ class TextBasedGame
   
   private #------------------------------------------
 
+  def create_players
+    num_players_options = get_num_players
+
+    if num_players_options == "1"
+      @player1 = TextComputerPlayer.new(X)
+      @player2 = TextComputerPlayer.new(O)
+    elsif num_players_options == "2"
+      initialize_with_one_player
+    elsif num_players_options == "3"
+      @player1 = TextHumanPlayer.new(X)
+      @player2 = TextHumanPlayer.new(O)
+    elsif num_players_options == "4"
+      initialize_LAN_game
+    end
+  end
+  
+  def get_num_players
+    prompt = "Select from the following player options:\n Enter '1' for Computer vs Computer\n Enter '2' for Human vs Computer\n Enter '3' for Human vs Human\n Enter '4' to play a LAN game\n"
+    possible_values = ["1", "2", "3", "4"]
+
+    return get_input(prompt, possible_values)
+  end
+
+  def initialize_with_one_player
+    input = get_human_players_team
+
+    if input == "X" || input == "x"
+      @player1 = TextHumanPlayer.new(X)
+      @player2 = TextComputerPlayer.new(O)
+    else
+      @player1 = TextComputerPlayer.new(X)
+      @player2 = TextHumanPlayer.new(O)
+    end
+  end
+
+  def get_human_players_team
+    prompt = "What team do you want to be on? X or O?"
+    possible_values = ["X", "x", "O", "o"]
+    
+    team = get_input(prompt, possible_values)
+
+    return team
+  end
+  
+  def initialize_LAN_game
+    @player1 = TextComputerPlayer.new(X)
+    @player2 = TextHumanPlayer.new(O)
+  end
+  
+  def get_difficulty
+    prompt = "Select from the following difficulty options:\n Enter '1' for Easy\n Enter '2' for Medium\n Enter '3' for Hard\n"
+    possible_values = ["1", "2", "3", "3"]
+
+    diff =  get_input(prompt, possible_values)
+
+    return "Easy" if diff == "1"
+    return "Medium" if diff == "2"
+    return "Hard" if diff == "3"
+  end
+  
   def create_and_return_board
     @board = get_board
     return @board
@@ -65,7 +125,7 @@ class TextBasedGame
   
   def get_board
     prompt = "Select from the following board size choices (rows X columns):\n Enter '1' for 3X3\n Enter '2' for 4X4\n Enter '3' to load a previously saved board\n"
-    possible_values = ["1", "2", "3"]
+    possible_values = ["1", "2", "3", "3"]
     option = get_input(prompt, possible_values)
     
     return Board.new(3,3) if option == "1"
@@ -94,64 +154,10 @@ class TextBasedGame
     
     return exists
   end
-
-  def create_players
-    num_players_options = get_num_players
-
-    if num_players_options == "1"
-      @player1 = TextComputerPlayer.new(X)
-      @player2 = TextComputerPlayer.new(O)
-    elsif num_players_options == "2"
-      initialize_with_one_player
-    elsif num_players_options == "3"
-      @player1 = TextHumanPlayer.new(X)
-      @player2 = TextHumanPlayer.new(O)
-    end
-  end
-  
-  def get_num_players
-    prompt = "Select from the following player options:\n Enter '1' for Computer vs Computer\n Enter '2' for Human vs Computer\n Enter '3' for Human vs Human\n"
-    possible_values = ["1", "2", "3"]
-
-    return get_input(prompt, possible_values)
-  end
-
-  def initialize_with_one_player
-    input = get_human_players_team
-
-    if input == "X" || input == "x"
-      @player1 = TextHumanPlayer.new(X)
-      @player2 = TextComputerPlayer.new(O)
-    else
-      @player1 = TextComputerPlayer.new(X)
-      @player2 = TextHumanPlayer.new(O)
-    end
-  end
-
-  def get_human_players_team
-    input = ""
-    while input != "X" && input != "x" && input != "O" && input != "o"
-      $stdout.puts "What team do you want to be on? X or O?"
-      input = $stdin.gets.chomp
-    end
-
-    return input
-  end
-  
-  def get_difficulty
-    prompt = "Select from the following difficulty options:\n Enter '1' for Easy\n Enter '2' for Medium\n Enter '3' for Hard\n"
-    possible_values = ["1", "2", "3"]
-
-    diff =  get_input(prompt, possible_values)
-
-    return "Easy" if diff == "1"
-    return "Medium" if diff == "2"
-    return "Hard" if diff == "3"
-  end
   
   def get_rules
     prompt = "Select from the following game rules:\n Enter '1' for standard rules (win by controlling 3 spaces in a row)\n Enter '2' for 2X2 rules (win by controlling a 2X2 block of spaces or 3 in a row)\n"
-    possible_values = ["1", "2", "2"]
+    possible_values = ["1", "2", "2", "2"]
 
     rules =  get_input(prompt, possible_values)
 
@@ -162,7 +168,7 @@ class TextBasedGame
   def get_input(prompt, possible_values)
     val = ""
     
-    while val != possible_values[0] && val != possible_values[1] && val != possible_values[2]
+    while val != possible_values[0] && val != possible_values[1] && val != possible_values[2] && val != possible_values[3]
       $stdout.puts prompt
       val = $stdin.gets.chomp
     end
