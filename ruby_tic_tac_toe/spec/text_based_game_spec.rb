@@ -14,7 +14,7 @@ describe TextBasedGame do
     choose_rules_output = "Select from the following game rules:\n Enter '1' for standard rules (win by controlling 3 spaces in a row)\n Enter '2' for 2X2 rules (win by controlling a 2X2 block of spaces or 3 in a row)\n"
     @initializers_output_human_vs_comp = select_board_size_output + select_player_options_output + choose_team_output + choose_difficulty_output + choose_rules_output
     @initializers_output_human_vs_human = select_board_size_output + select_player_options_output + choose_rules_output
-    @initializers_output_load_board = select_board_size_output + "Enter the file name to your previously saved game:\n" + select_player_options_output + choose_rules_output
+    @initializers_output_load_board = select_board_size_output + "Enter the file name to your previously saved game:\nNo file found\nEnter the file name to your previously saved game:\n" + select_player_options_output + choose_rules_output
   end
   
   def start_game
@@ -57,17 +57,21 @@ describe TextBasedGame do
   end
   
   it "get_saved_board - private method that loads up a previously saved board from file" do
-    @myio_in.string = "3\ntest\n3\n2\n"
+    @myio_in.string = "3\ninvalid@\ntest\n3\n2\n"
     File.open("temp/test_save_game.txt","wb") {|file| Marshal.dump(Board.new(4,4),file)}
     start_game
     @myio_out.string.should == @initializers_output_load_board
   end
   
   it "save_and_exit - private method of TextHumanPlayer invoked by TextBasedGame" do
-    @myio_in.string = "1\n2\nX\n3\n1\n5"
+    if File.exist?("temp/test_save_game.txt") == true
+      File.delete("temp/test_save_game.txt")
+    end
+    
+    @myio_in.string = "1\n2\nX\n3\n1\n5\nS\ninvalid%\ntest"
     start_game
-    @my_game.run_turn(X)
-    @myio_out.string.should == @initializers_output_human_vs_comp
+    @my_game.run_game
+    @myio_out.string.should == @initializers_output_human_vs_comp + "|1|2|3|\n|4|5|6|\n|7|8|9|\nSelect location of next move (or enter 'S' to save board and exit game):\nMove successfully made\n|1|2|3|\n|4|X|6|\n|7|8|9|\nPlease wait, computer thinking of next move...\nComputer moved to space: 1\n|O|2|3|\n|4|X|6|\n|7|8|9|\nSelect location of next move (or enter 'S' to save board and exit game):\nEnter the name you wish to save your game under:\nInvalid file name\nEnter the name you wish to save your game under:\n"
   end
   
   it "game_over ends the game and prints whether x won, o won, or nobody won" do

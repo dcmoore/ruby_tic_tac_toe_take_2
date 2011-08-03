@@ -47,7 +47,10 @@ class TextHumanPlayer < HumanPlayer
   end
   
   def valid_file_name(file_name)
-    if file_name == "" || file_name == "test"
+    if file_name == ""
+      return false
+    elsif !(file_name[/^[A-Za-z0-9]+$/])
+      $stdout.puts "Invalid file name"
       return false
     end
     return true

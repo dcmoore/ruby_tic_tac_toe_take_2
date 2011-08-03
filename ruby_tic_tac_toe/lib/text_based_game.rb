@@ -81,17 +81,18 @@ class TextBasedGame
       file_name = $stdin.gets.chomp
     end
     
-    File.open("temp/" + file_name.to_s + "_save_game.txt","rb") {|f| loaded_board = Marshal.load(f)}
+    File.open("temp/" + file_name + "_save_game.txt","rb") {|f| loaded_board = Marshal.load(f)}
+    File.delete("temp/" + file_name + "_save_game.txt")
     return loaded_board
   end
   
   def file_exists(file_name) 
-    is_valid = File.exist?("temp/" + file_name.to_s + "_save_game.txt")
-    if is_valid == false && file_name != ""
-      $stdout.puts "Invalid File Name"
+    exists = File.exist?("temp/" + file_name + "_save_game.txt")
+    if exists == false && file_name != ""
+      $stdout.puts "No file found"
     end
     
-    return is_valid
+    return exists
   end
 
   def create_players
