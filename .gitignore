@@ -2,3 +2,4 @@
 ruby_tic_tac_toe/ruby_prof_output.txt
 ruby_tic_tac_toe/spec/.DS_Store
 coverage/
+temp/

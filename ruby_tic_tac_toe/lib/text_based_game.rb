@@ -9,7 +9,7 @@ require 'constants'
 
 class TextBasedGame
   def initialize()
-    @board = create_board
+    @board = create_and_return_board
     create_players
     if @player1.class == TextComputerPlayer || @player2.class == TextComputerPlayer
       @difficulty = get_difficulty
@@ -18,22 +18,28 @@ class TextBasedGame
   end
   
   def run_game
-    while Calculate.is_game_over?(@board, @rules) == false
+    game_status = "CONTINUE"
+    
+    while Calculate.is_game_over?(@board, @rules) == false && game_status == "CONTINUE"
       @board.print_board_with_empty_locations
       if Calculate.current_team(@board) == @player1.team
-        run_turn(@player1)
+        game_status = run_turn(@player1)
       else
-        run_turn(@player2)
+        game_status = run_turn(@player2)
       end
     end
   end
   
   def run_turn(player)
     if player.class == TextHumanPlayer
-      @board = player.take_turn(@board)
+      move = player.take_turn(@board)
+      return "EXIT" if move == "EXIT"
+      @board = move
     elsif player.class == TextComputerPlayer
       @board = player.take_turn(@board, @difficulty, @rules)
     end
+    
+    return "CONTINUE"
   end
   
   def game_over
@@ -46,29 +52,46 @@ class TextBasedGame
     elsif who_won == DRAW
       $stdout.puts "Draw"
     end
+    $stdout.puts "Thanks for playing!"
   end
   
   
   private #------------------------------------------
 
-  def create_board
-    size = get_size_of_board
-    rows = size
-    cols = rows
-    @board = Board.new(rows, cols)
+  def create_and_return_board
+    @board = get_board
     return @board
   end
   
-  def get_size_of_board
-    size = ""
-    while size != "1" && size != "2"
-      $stdout.puts "Select from the following board size choices (rows X columns):"
-      $stdout.puts " Enter \'1\' for 3X3"
-      $stdout.puts " Enter \'2\' for 4X4"
-      size = $stdin.gets.chomp
+  def get_board
+    prompt = "Select from the following board size choices (rows X columns):\n Enter '1' for 3X3\n Enter '2' for 4X4\n Enter '3' to load a previously saved board\n"
+    possible_values = ["1", "2", "3"]
+    option = get_input(prompt, possible_values)
+    
+    return Board.new(3,3) if option == "1"
+    return Board.new(4,4) if option == "2"
+    return get_saved_board if option == "3"
+  end
+  
+  def get_saved_board
+    file_name, loaded_board = "", nil
+    
+    while file_exists(file_name) == false
+      $stdout.puts "Enter the file name to your previously saved game:"
+      file_name = $stdin.gets.chomp
     end
-    return 3 if size == "1"
-    return 4 if size == "2"
+    
+    File.open("temp/" + file_name.to_s + "_save_game.txt","rb") {|f| loaded_board = Marshal.load(f)}
+    return loaded_board
+  end
+  
+  def file_exists(file_name) 
+    is_valid = File.exist?("temp/" + file_name.to_s + "_save_game.txt")
+    if is_valid == false && file_name != ""
+      $stdout.puts "Invalid File Name"
+    end
+    
+    return is_valid
   end
 
   def create_players
