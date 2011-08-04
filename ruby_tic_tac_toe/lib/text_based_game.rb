@@ -52,7 +52,8 @@ class TextBasedGame
     elsif who_won == DRAW
       $stdout.puts "Draw"
     end
-    $stdout.puts "Thanks for playing!"
+    
+    play_again?
   end
   
   
@@ -174,6 +175,36 @@ class TextBasedGame
     end
     
     return val
+  end
+  
+  def play_again?
+    prompt = "Want to play again?\n Enter 'y' to play again\n Enter 'n' to exit\n"
+    input =  get_input(prompt, ["y", "Y", "n", "N"])
+    
+    if (input == "y" || input == "Y")
+      prompt = "Want to use the same game settings?\n Enter 'y' to use the same settings\n Enter 'n' to choose new settings\n"
+      input =  get_input(prompt, ["y", "Y", "n", "N"])
+      
+      if input == "y" || input == "Y"
+        play_again(true)
+      else
+        play_again(false)
+      end
+    else
+      $stdout.puts "Thanks for playing!"
+    end
+  end
+  
+  def play_again(use_same_settings)
+    if use_same_settings == true
+      @board.reset
+      run_game
+      game_over
+    else
+      next_game = TextBasedGame.new
+      next_game.run_game
+      next_game.game_over
+    end
   end
 end
 
