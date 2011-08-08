@@ -1,5 +1,3 @@
-# Theater.active_stage.size = [300, 510]
-
 board {
   width 310
   height 500
@@ -23,8 +21,8 @@ square {
 }
 
 options_box {
-  width 310
-  height 190
+  width 300
+  height 165
   padding 5
   background_color :white
   text_color :black
@@ -37,7 +35,7 @@ prompt {
 }
 
 option {
-  width 145
+  width 135
 }
 
 line_spacer {
