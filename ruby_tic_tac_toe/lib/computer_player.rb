@@ -124,6 +124,34 @@ class ComputerPlayer < Player
   end
 end
 
+class TicTacToeComputerPlayer < ComputerPlayer
+  def hard_difficulty(board)
+    if board.get_num_spaces == 9
+      return minimax(board, 0, 5) if board.get_num_moves_made != 0
+    elsif board.get_num_spaces == 16
+      if board.get_num_moves_made <= 4
+        return get_empty_middle_space(board) if empty_middle_space?(board)
+      elsif board.get_num_moves_made <= 8
+        return minimax(board, 0, 3)
+      end
+    end
+    
+    return minimax(board, 0, 2)
+  end
+  
+  def empty_middle_space?(board)
+    return true if (board.space_contents(5) == EMPTY || board.space_contents(6) == EMPTY || board.space_contents(9) == EMPTY || board.space_contents(10) == EMPTY)
+    return false
+  end
+  
+  def get_empty_middle_space(board)
+    return 5 if board.space_contents(5) == EMPTY
+    return 6 if board.space_contents(6) == EMPTY
+    return 9 if board.space_contents(9) == EMPTY
+    return 10 if board.space_contents(10) == EMPTY
+  end
+end
+
 class TextComputerPlayer < ComputerPlayer
 end
 

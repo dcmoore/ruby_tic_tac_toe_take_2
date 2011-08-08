@@ -36,7 +36,7 @@ describe "profiling" do
   it "ComputerPlayer.take_turn(Board, Hard) - testing this method with the hard difficulty turned on" do
     @ai_playerX.set_difficulty("Hard")
     
-    RubyProf.start
+    # RubyProf.start
     # Testing for 1st move
     @board = @ai_playerX.take_turn(@board)
     @board.space_contents(0).should == X
@@ -96,11 +96,11 @@ describe "profiling" do
     @board.space_contents(7).should_not == O
     @board.reset
     
-    result = RubyProf.stop
-
-    # Print a flat profile to text
-    printer = RubyProf::FlatPrinter.new(result)
-    printer.print(File.new("ruby_prof_output.txt", "w"), 0)
+    # result = RubyProf.stop
+    # 
+    # # Print a flat profile to text
+    # printer = RubyProf::FlatPrinter.new(result)
+    # printer.print(File.new("ruby_prof_output.txt", "w"), 0)
   end
 
   def setup_x_win_on_row

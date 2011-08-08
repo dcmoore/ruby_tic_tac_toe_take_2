@@ -48,8 +48,8 @@ class TextGameEngine < GameEngine
     num_players_options = get_num_players
 
     if num_players_options == "1"
-      @player1 = TextComputerPlayer.new(X, "AIBot1", "Easy", @rules)
-      @player2 = TextComputerPlayer.new(O, "AIBot2", "Easy", @rules)
+      @player1 = TicTacToeComputerPlayer.new(X, "AIBot1", "Easy", @rules)
+      @player2 = TicTacToeComputerPlayer.new(O, "AIBot2", "Easy", @rules)
       @player1.set_difficulty(get_difficulty(@player1))
       @player2.set_difficulty(get_difficulty(@player2))
     elsif num_players_options == "2"
@@ -67,10 +67,10 @@ class TextGameEngine < GameEngine
 
     if input == "X" || input == "x"
       @player1 = TextHumanPlayer.new(X, "Human")
-      @player2 = TextComputerPlayer.new(O, "AIBot", "Easy", @rules)
+      @player2 = TicTacToeComputerPlayer.new(O, "AIBot", "Easy", @rules)
       @player2.set_difficulty(get_difficulty(@player2))
     else
-      @player1 = TextComputerPlayer.new(X, "AIBot", "Easy", @rules)
+      @player1 = TicTacToeComputerPlayer.new(X, "AIBot", "Easy", @rules)
       @player1.set_difficulty(get_difficulty(@player1))
       @player2 = TextHumanPlayer.new(O, "Human")
     end
