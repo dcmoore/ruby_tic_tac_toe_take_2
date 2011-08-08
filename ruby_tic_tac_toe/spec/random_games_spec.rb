@@ -1,5 +1,5 @@
 # require File.dirname(__FILE__) + "/spec_helper"
-# require 'board'
+# require 'tic_tac_toe_board'
 # require 'calculate'
 # require 'ruby-prof'
 # 

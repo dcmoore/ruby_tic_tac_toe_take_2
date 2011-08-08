@@ -1,16 +1,33 @@
 require 'constants'
-require 'calculate'
+require 'game_engine'
+require 'player'
 
 class ComputerPlayer < Player
-  def take_turn(board, difficulty, rules)
+  def initialize(t, n, d, r)
+    @team = t
+    @name = n
+    @difficulty = d
+    @rules = r
+  end
+  
+  def set_difficulty(d)
+    @difficulty = d
+  end
+  
+  def set_rules(r)
+    @rules = r
+  end
+    
+  def take_turn(board)
+    @game_logic = GameEngine.new
     $stdout.puts "Please wait, computer thinking of next move..."
     ai_move = ""
-    if difficulty == "Easy"
+    if @difficulty == "Easy"
       ai_move = easy_difficulty(board)
-    elsif difficulty == "Medium"
-      ai_move = medium_difficulty(board, rules)
+    elsif @difficulty == "Medium"
+      ai_move = medium_difficulty(board)
     else
-      ai_move = hard_difficulty(board, rules)
+      ai_move = hard_difficulty(board)
     end
     
     if board.space_contents(ai_move) == EMPTY
@@ -22,54 +39,54 @@ class ComputerPlayer < Player
   end
   
   
-  private #-----------------------------------
+  protected #-----------------------------------
   
   def easy_difficulty(board)
     return get_random_empty_space(board)
   end
   
   def get_random_empty_space(board)
-    move = rand(board.num_total_spaces)
+    move = rand(board.get_num_spaces)
     while board.space_contents(move) != EMPTY
-      move = rand(board.num_total_spaces)
+      move = rand(board.get_num_spaces)
     end
 
     return move
   end
   
-  def medium_difficulty(board, rules)
-    if board.num_total_spaces == 9
-      return minimax(board, 0, 4, rules) if board.num_moves_made != 0
-    elsif board.num_total_spaces == 16
-      return minimax(board, 0, 1, rules) if board.num_moves_made <= 6
+  def medium_difficulty(board)
+    if board.get_num_spaces == 9
+      return minimax(board, 0, 4) if board.get_num_moves_made != 0
+    elsif board.get_num_spaces == 16
+      return minimax(board, 0, 1) if board.get_num_moves_made <= 6
     end
     
-    return minimax(board, 0, 3, rules)
+    return minimax(board, 0, 3)
   end
   
-  def hard_difficulty(board, rules)
-    if board.num_total_spaces == 9
-      return minimax(board, 0, 5, rules) if board.num_moves_made != 0
-    elsif board.num_total_spaces == 16
-      return minimax(board, 0, 3, rules) if board.num_moves_made >= 6
+  def hard_difficulty(board)
+    if board.get_num_spaces == 9
+      return minimax(board, 0, 5) if board.get_num_moves_made != 0
+    elsif board.get_num_spaces == 16
+      return minimax(board, 0, 3) if board.get_num_moves_made >= 6
     end
     
-    return minimax(board, 0, 2, rules)
+    return minimax(board, 0, 2)
   end
   
   #TODO - split into smaller methods
-  def minimax(board, depth, max_depth, rules)
+  def minimax(board, depth, max_depth)
     best_move_location, best_move_minimax_val = nil, -2
     
-    return get_end_game_val(board, depth, best_move_location, rules) if Calculate.is_game_over?(board, rules) != false
+    return get_end_game_val(board, depth, best_move_location) if @game_logic.is_game_over?(board, @rules) != false
     return get_reached_max_depth_val(depth, best_move_location) if depth == (max_depth+1)
     
     if depth <= max_depth
-      board.num_total_spaces.times do |location|
+      board.get_num_spaces.times do |location|
         if board.space_contents(location) == EMPTY
-          board.make_move(location, Calculate.current_team(board))
+          board.make_move(location, @game_logic.current_team(board))
 
-          current_space_minimax_val = minimax(board, depth+1, max_depth, rules) * -1
+          current_space_minimax_val = minimax(board, depth+1, max_depth) * -1
           board.make_move(location, EMPTY)
 
           if current_space_minimax_val > best_move_minimax_val
@@ -86,8 +103,8 @@ class ComputerPlayer < Player
     return minimax_return_value(depth, best_move_minimax_val, best_move_location)
   end
   
-  def get_end_game_val(board, depth, best_move_location, rules)
-    if Calculate.is_game_over?(board, rules) == DRAW
+  def get_end_game_val(board, depth, best_move_location)
+    if @game_logic.is_game_over?(board, @rules) == DRAW
       return minimax_return_value(depth, 0, best_move_location)
     else #Win
       return minimax_return_value(depth, -1, best_move_location)

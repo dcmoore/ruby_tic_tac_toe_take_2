@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + "/spec_helper"
-require 'gui_based_game'
+require 'gui_game_engine'
 
-describe GUIBasedGame do
+describe GUIGameEngine do
   before do
     
   end
