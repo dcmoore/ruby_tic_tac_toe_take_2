@@ -21,4 +21,8 @@ options_box do
   line_spacer
   prompt :id => "choose_team", :text => "Select your team:"
   option :id => "opt_team", :players => "combo_box", :choices => ["X", "O"]
+  line_spacer
+  line_spacer
+  button_spacer
+  new_game :players => 'button', :text => 'New Game'
 end

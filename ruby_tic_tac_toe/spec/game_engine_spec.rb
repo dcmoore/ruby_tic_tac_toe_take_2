@@ -1,7 +1,6 @@
 require File.dirname(__FILE__) + "/spec_helper"
 require 'tic_tac_toe_board'
 require 'game_engine'
-require 'ruby-prof'
 
 describe GameEngine do
   before do

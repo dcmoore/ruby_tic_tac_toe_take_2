@@ -1,10 +1,27 @@
 module Square  
   def mouse_clicked(e)
-    fill_space_action(id, "X")
+    square = scene.find(id)
+    if is_space_empty?(square) == true
+      if production.game.is_game_over?(production.game.board, production.game.rules) == false
+        puts "game aint ova yet"
+        fill_space_action(square, production.game.current_team(production.game.board))
+      end
+    end
   end
   
-  def fill_space_action(id, team)
-    square = scene.find(id)
-    square.text = team
+  def is_space_empty?(square)
+    if square.text == ""
+      return true
+    end
+    
+    return false
+  end
+  
+  def fill_space_action(square, team)
+    if team == 1
+      square.text = "X"
+    elsif team == 2
+      square.text = "O"
+    end
   end
 end

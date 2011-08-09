@@ -1,6 +1,6 @@
 board {
   width 310
-  height 500
+  height 562
   background_color :black
   padding 5
 }
@@ -22,7 +22,7 @@ square {
 
 options_box {
   width 300
-  height 165
+  height 215
   padding 5
   background_color :white
   text_color :black
@@ -41,4 +41,12 @@ option {
 line_spacer {
   width 310
   height 5
+}
+
+button_spacer {
+  width 95
+}
+
+new_game {
+  width 100
 }

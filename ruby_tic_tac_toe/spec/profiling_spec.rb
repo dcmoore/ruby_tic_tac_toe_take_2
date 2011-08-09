@@ -1,7 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + "/spec_helper") 
 require 'tic_tac_toe_board'
 require 'computer_player'
-require 'ruby-prof'
+# require 'ruby-prof'
 
 describe "profiling" do
   before do
