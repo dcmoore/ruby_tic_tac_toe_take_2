@@ -1,12 +1,14 @@
 require File.dirname(__FILE__) + "/spec_helper"
 require 'gui_game_engine'
+gem 'limelight'
+
 
 describe GUIGameEngine do
   before do
-    
   end
   
   it "should change text_color on click" do
+    uses_limelight :scene => "main", :hidden => true
   end
   
   it "should set x to space that was selected during x's turn" do

@@ -1,13 +1,16 @@
 # require File.dirname(__FILE__) + "/spec_helper"
 # require 'tic_tac_toe_board'
-# require 'calculate'
-# require 'ruby-prof'
+# require 'game_engine'
+# require 'computer_player'
 # 
 # describe "random game simulations" do
 #   before do
-#     @board = Board.new(3,3)
+#     @board = TicTacToeBoard.new(4)
+#     @game_logic = GameEngine.new
 #     @difficulty = "Hard"
-#     @rules = "rows_cols_diags"
+#     @rules = "rows_cols_diags_blocks"
+#     @ai_X = TicTacToeComputerPlayer.new(X, "AIBot1", @difficulty, @rules)
+#     @ai_O = TicTacToeComputerPlayer.new(O, "AIBot2", @difficulty, @rules)
 #   end
 # 
 #   it "Testing the AI against random moves when the AI moves 1st" do
@@ -22,20 +25,23 @@
 #     fail_flag, num_fails = false, 0
 #     
 #     while num_games != 0
-#       while Calculate.is_game_over?(@board, @rules) == false
-#         if Calculate.current_team(@board) == ai_team
-#           ai_move = Calculate.best_move(@board, @difficulty)
-#           @board.make_move(ai_move, ai_team)
+#       while @game_logic.is_game_over?(@board, @rules) == false
+#         if @game_logic.current_team(@board) == ai_team
+#           if ai_team == @ai_X.team
+#             @board = @ai_X.take_turn(@board)
+#           else
+#             @board = @ai_O.take_turn(@board)
+#           end
 #         else
-#           move = rand(@board.num_total_spaces)
+#           move = rand(@board.get_num_spaces)
 #           while @board.space_contents(move) != EMPTY
-#             move = rand(@board.num_total_spaces)
+#             move = rand(@board.get_num_spaces)
 #           end
 # 
 #           @board.make_move(move, rand_team)
 #         end
 # 
-#         if Calculate.is_game_over?(@board, @rules) == rand_team
+#         if @game_logic.is_game_over?(@board, @rules) == rand_team
 #           fail_flag = true
 #         end
 #       end

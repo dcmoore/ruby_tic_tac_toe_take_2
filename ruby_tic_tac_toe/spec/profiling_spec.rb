@@ -6,8 +6,8 @@ require 'ruby-prof'
 describe "profiling" do
   before do
     @board = TicTacToeBoard.new(3)
-    @ai_playerX = ComputerPlayer.new(X, "Steve", "Hard", "rows_cols_diags")
-    @ai_playerO = ComputerPlayer.new(O, "Jerry", "Hard", "rows_cols_diags")
+    @ai_playerX = TicTacToeComputerPlayer.new(X, "Steve", "Hard", "rows_cols_diags")
+    @ai_playerO = TicTacToeComputerPlayer.new(O, "Jerry", "Hard", "rows_cols_diags")
     @original_stdout = $stdout
     @myio_out = StringIO.new
     $stdout = @myio_out
