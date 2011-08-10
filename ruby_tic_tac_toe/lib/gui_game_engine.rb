@@ -22,9 +22,9 @@ class GUIGameEngine < GameEngine
   end
   
   def get_ai_move    
-    if @player1.class == TicTacToeComputerPlayer
+    if @player1.class == TicTacToeComputerPlayer && @player1.team == current_team(@board)
       return get_player_move(@player1)
-    elsif @player2.class == TicTacToeComputerPlayer
+    elsif @player2.class == TicTacToeComputerPlayer && @player2.team == current_team(@board)
       return get_player_move(@player2)
     end
     

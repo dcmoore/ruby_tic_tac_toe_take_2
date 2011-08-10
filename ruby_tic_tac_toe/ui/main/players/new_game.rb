@@ -23,6 +23,33 @@ module NewGame
         s.style.font_size = 50
       end
     end
+    
+    if production.game.player_val == "AI vs AI"
+      while production.game.is_game_over?(production.game.board, production.game.rules) == false
+        ai_move = scene.find(production.game.get_ai_move)
+        fill_space_action(ai_move, production.game.current_team(production.game.board))
+        production.game.board.make_move(ai_move.id.to_i, production.game.current_team(production.game.board))
+      end
+      
+      squares = scene.find_by_name("square")
+      squares.each do |s|
+        s.style.background_color = "red"
+      end
+    elsif production.game.player_val == "Player vs AI" && production.game.team_val == "O"
+      squares = scene.find_by_name("square")
+      squares.each do |s|
+        s.style.background_color = "yellow"
+      end
+      
+      ai_move = scene.find(production.game.get_ai_move)
+      fill_space_action(ai_move, production.game.current_team(production.game.board))
+      production.game.board.make_move(ai_move.id.to_i, production.game.current_team(production.game.board))
+      
+      squares = scene.find_by_name("square")
+      squares.each do |s|
+        s.style.background_color = "white"
+      end
+    end
   end
   
   def reset_board(space_id_list)
@@ -32,6 +59,14 @@ module NewGame
       space_id_list.each do |i|
         square :id => i.to_s
       end
+    end
+  end
+  
+  def fill_space_action(square, team)
+    if team == 1
+      square.text = "X"
+    elsif team == 2
+      square.text = "O"
     end
   end
 end

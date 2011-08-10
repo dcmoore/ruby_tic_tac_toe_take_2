@@ -129,20 +129,20 @@ class TicTacToeComputerPlayer < ComputerPlayer
       end
     end
 
-    return minimax(board, 0, 2)
+    return minimax(board, 0, 3)
   end
   
   def get_best_empty_middle_space(board)
-    if board.space_contents(10) == @game_logic.what_is_the_other_team(@team)
+    if board.space_contents(10) == @game_logic.what_is_the_other_team(@team) && board.space_contents(5) != @team
       return 6 if board.space_contents(6) == EMPTY
       return 9 if board.space_contents(9) == EMPTY
-    elsif board.space_contents(9) == @game_logic.what_is_the_other_team(@team)
+    elsif board.space_contents(9) == @game_logic.what_is_the_other_team(@team) && board.space_contents(6) != @team
       return 5 if board.space_contents(5) == EMPTY
       return 10 if board.space_contents(10) == EMPTY
-    elsif board.space_contents(6) == @game_logic.what_is_the_other_team(@team)
+    elsif board.space_contents(6) == @game_logic.what_is_the_other_team(@team) && board.space_contents(9) != @team
       return 5 if board.space_contents(5) == EMPTY
       return 10 if board.space_contents(10) == EMPTY
-    elsif board.space_contents(5) == @game_logic.what_is_the_other_team(@team)
+    elsif board.space_contents(5) == @game_logic.what_is_the_other_team(@team) && board.space_contents(10) != @team
       return 6 if board.space_contents(6) == EMPTY
       return 9 if board.space_contents(9) == EMPTY
     end
@@ -157,7 +157,10 @@ class TicTacToeComputerPlayer < ComputerPlayer
       return 2
     end
     
-    return minimax(board, 0, 2)
+    return 5 if board.space_contents(5) == EMPTY
+    return 10 if board.space_contents(10) == EMPTY
+    return 6 if board.space_contents(6) == EMPTY
+    return 9 if board.space_contents(9) == EMPTY
   end
 end
 
