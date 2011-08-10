@@ -1,5 +1,6 @@
 module NewGame  
   def mouse_clicked(e)
+    puts "---------New Game Created---------"
     production.game = GUIGameEngine.new(scene)
     
     opt = scene.find("opt_board")
@@ -29,7 +30,7 @@ module NewGame
     container.remove_all
     container.build do
       space_id_list.each do |i|
-        square :id => "square"+i.to_s
+        square :id => i.to_s
       end
     end
   end

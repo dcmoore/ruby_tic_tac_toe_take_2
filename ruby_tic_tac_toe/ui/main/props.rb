@@ -2,7 +2,7 @@ __ :name => "board"
 
 squares :id => "squares_container" do
   [0, 1, 2, 3, 4, 5, 6, 7, 8].each do |s|
-    square :id => "square"+s.to_s
+    square :id => s.to_s
   end
 end
 

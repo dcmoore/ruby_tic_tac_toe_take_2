@@ -8,7 +8,7 @@ require 'save_load_object'
 
 
 class GUIGameEngine < GameEngine
-  attr_reader :board, :rules
+  attr_reader :board, :rules, :player_val, :team_val
   
   def initialize(scene)
     @scene = scene
@@ -23,7 +23,7 @@ class GUIGameEngine < GameEngine
   end
   
   def run_game
-    puts "------------------------------"
+    puts "---------Run Game Logic Here---------"
     #####################
   end
   
@@ -31,8 +31,8 @@ class GUIGameEngine < GameEngine
   private #------------------------------------------
   
   def create_and_set_board
-    board_val = @scene.find("opt_board")
-    if board_val.value == "3X3"
+    board_val = @scene.find("opt_board").value
+    if board_val == "3X3"
       @board = TicTacToeBoard.new(3)
     else
       @board = TicTacToeBoard.new(4)
@@ -42,8 +42,8 @@ class GUIGameEngine < GameEngine
   end
   
   def set_rules
-    rules_val = @scene.find("opt_rules")
-    if rules_val.value == "Standard"
+    rules_val = @scene.find("opt_rules").value
+    if rules_val == "Standard"
       @rules = "rows_cols_diags"
     else
       @rules = "rows_cols_diags_blocks"
@@ -53,16 +53,16 @@ class GUIGameEngine < GameEngine
   end
   
   def create_and_set_players
-    player_val = @scene.find("opt_player")
-    @difficulty = @scene.find("opt_difficulty")
-    team_val = @scene.find("opt_team")
+    @player_val = @scene.find("opt_player").value
+    @difficulty = @scene.find("opt_difficulty").value
+    @team_val = @scene.find("opt_team").value
     selected_team = 999
     
-    if player_val.value == "Player vs Player"
+    if @player_val == "Player vs Player"
       @player1 = TextHumanPlayer.new(X, "Human1")
       @player2 = TextHumanPlayer.new(O, "Human2")
-    elsif player_val.value == "Player vs AI"
-      if team_val == "X"
+    elsif @player_val == "Player vs AI"
+      if @team_val == "X"
         selected_team = X
       else
         selected_team = O
