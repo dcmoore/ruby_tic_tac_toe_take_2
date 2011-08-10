@@ -28,6 +28,7 @@ describe "profiling" do
     move.should >= 0
     
     @ai_playerX.set_difficulty("Medium")
+    move = @ai_playerX.get_move(@board)
     move.should < @board.get_num_spaces
     move.should >= 0
     move = @ai_playerX.get_move(TicTacToeBoard.new(4))
