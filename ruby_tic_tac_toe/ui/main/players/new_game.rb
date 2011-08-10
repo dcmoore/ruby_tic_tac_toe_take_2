@@ -1,6 +1,5 @@
 module NewGame  
   def mouse_clicked(e)
-    puts "---------New Game Created---------"
     production.game = GUIGameEngine.new(scene)
     
     opt = scene.find("opt_board")
@@ -12,6 +11,7 @@ module NewGame
         s.style.width = 100
         s.style.height = 100
         s.style.font_size = 60
+        s.style.background_color = "white"
       end
     elsif opt.value == "4X4"
       reset_board([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15])

@@ -13,7 +13,6 @@ class GUIGameEngine < GameEngine
   def initialize(scene)
     @scene = scene
     get_settings
-    run_game
   end
   
   def get_settings
@@ -22,9 +21,26 @@ class GUIGameEngine < GameEngine
     create_and_set_players
   end
   
-  def run_game
-    puts "---------Run Game Logic Here---------"
-    #####################
+  def get_ai_move
+    if @player1.class == TicTacToeComputerPlayer && current_team(@board) == @player1.team
+      return get_player_move(@player1)
+    elsif @player2.class == TicTacToeComputerPlayer && current_team(@board) == @player2.team
+      return get_player_move(@player2)
+    end
+  end
+  
+  def get_player_move(plyr)
+    ai_move = -1
+    
+    if @difficulty == "Easy"
+      ai_move = plyr.easy_difficulty(board)
+    elsif @difficulty == "Medium"
+      ai_move = plyr.medium_difficulty(board)
+    else
+      ai_move = plyr.hard_difficulty(board)
+    end
+    
+    return ai_move
   end
   
   
@@ -37,8 +53,6 @@ class GUIGameEngine < GameEngine
     else
       @board = TicTacToeBoard.new(4)
     end
-    
-    puts "Board: " + @board.get_size.to_s
   end
   
   def set_rules
@@ -48,8 +62,6 @@ class GUIGameEngine < GameEngine
     else
       @rules = "rows_cols_diags_blocks"
     end
-    
-    puts "Rules: " + @rules.to_s
   end
   
   def create_and_set_players
@@ -74,8 +86,5 @@ class GUIGameEngine < GameEngine
       @player1 = TicTacToeComputerPlayer.new(X, "AIBot1", @difficulty, @rules)
       @player2 = TicTacToeComputerPlayer.new(O, "AIBot2", @difficulty, @rules)
     end
-    
-    puts "Player 1: " + @player1.name.to_s
-    puts "Player 2: " + @player2.name.to_s
   end
 end

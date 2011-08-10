@@ -18,9 +18,8 @@ class ComputerPlayer < Player
     @rules = r
   end
     
-  def take_turn(board)
+  def get_move(board)
     @game_logic = GameEngine.new
-    $stdout.puts "Please wait, computer thinking of next move..."
     ai_move = ""
     if @difficulty == "Easy"
       ai_move = easy_difficulty(board)
@@ -30,16 +29,11 @@ class ComputerPlayer < Player
       ai_move = hard_difficulty(board)
     end
     
-    if board.space_contents(ai_move) == EMPTY
-      board.make_move(ai_move, team)
-      $stdout.puts "Computer moved to space: " + (ai_move+1).to_s
-    end
-    
-    return board
+    return ai_move
   end
   
   
-  protected #-----------------------------------
+  protected #--------------------------------------------
   
   def easy_difficulty(board)
     return get_random_empty_space(board)
@@ -123,6 +117,8 @@ class ComputerPlayer < Player
     end
   end
 end
+
+
 
 class TicTacToeComputerPlayer < ComputerPlayer
   def hard_difficulty(board)    

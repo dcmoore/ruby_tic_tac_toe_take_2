@@ -2,24 +2,16 @@ module Square
   def mouse_clicked(e)
     square = scene.find(id)
     
-    puts "Board size: " + production.game.board.get_size.to_s
-    puts "Rules: " + production.game.rules.to_s
-    puts "Players: " + production.game.player_val.to_s
-    puts "Human Team: " + production.game.team_val.to_s
-    
     if is_space_empty?(square) == true
-      if production.game.player_val == "Player vs Player"
+      if is_it_humans_turn? == true
         make_move_if_game_isnt_over_yet(square, id)
-      elsif production.game.player_val == "Player vs AI"
-        if production.game.team_val == "X"
-          if production.game.current_team(production.game.board) == 1
-            make_move_if_game_isnt_over_yet(square, id)
-          end
-        elsif production.game.team_val == "O"
-          if production.game.current_team(production.game.board) == 2
-            make_move_if_game_isnt_over_yet(square, id)
-          end
-        end
+      end
+    end
+    
+    if production.game.is_game_over?(production.game.board, production.game.rules) != false
+      squares = scene.find_by_name("square")
+      squares.each do |s|
+        s.style.background_color = "red"
       end
     end
   end
@@ -32,7 +24,21 @@ module Square
     return false
   end
   
-  def make_move_if_game_isnt_over_yet (square, id)
+  def is_it_humans_turn?
+    return true if production.game.player_val == "Player vs Player"
+    
+    if production.game.player_val == "Player vs AI"
+      if production.game.team_val == "X"
+        return true if production.game.current_team(production.game.board) == 1
+      elsif production.game.team_val == "O"
+        return true if production.game.current_team(production.game.board) == 2
+      end
+    end
+    
+    return false
+  end
+  
+  def make_move_if_game_isnt_over_yet(square, id)
     if production.game.is_game_over?(production.game.board, production.game.rules) == false
       fill_space_action(square, production.game.current_team(production.game.board))
       production.game.board.make_move(id.to_i, production.game.current_team(production.game.board))

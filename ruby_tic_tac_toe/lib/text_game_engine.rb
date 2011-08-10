@@ -25,20 +25,37 @@ class TextGameEngine < GameEngine
     while is_game_over?(@board, @rules) == false && game_status == "CONTINUE"
       TextGameIO.print_board(@board)
       if current_team(@board) == @player1.team
-        move = @player1.take_turn(@board)
+        game_status = take_turn(@player1, game_status)
       else
-        move = @player2.take_turn(@board)
-      end
-      
-      if move == "EXIT"
-        game_status = "EXIT"
-        save_game
-      else
-        @board = move
+        game_status = take_turn(@player2, game_status)
       end
     end
     
     game_over
+  end
+  
+  def take_turn(player, game_status)
+    if player.class == TicTacToeComputerPlayer
+      $stdout.puts "Please wait, computer thinking of next move..."
+    end
+    
+    move = player.get_move(@board)
+    
+    if move == "EXIT"
+      game_status = "EXIT"
+      save_game
+    elsif @board.space_contents(move) == EMPTY
+      @board.make_move(move, player.team)
+      if player.class == TicTacToeComputerPlayer
+        $stdout.puts "Computer moved to space: " + (move+1).to_s
+      else
+        $stdout.puts "Move successfully made"
+      end
+    else
+      $stdout.puts "Cannot move to a space that is already full"
+    end
+    
+    return game_status
   end
   
   

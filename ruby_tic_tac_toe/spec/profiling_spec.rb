@@ -18,63 +18,65 @@ describe "profiling" do
     $stdout = @original_stdout
   end
   
-  it "ComputerPlayer.take_turn(Board) - returns a hash containing the row and column of the best possible next move at the specified difficulty" do
+  it "ComputerPlayer.get_move(Board) - returns the location of the best possible next move at the specified difficulty" do
     @ai_playerX.set_difficulty("Easy")
-    @board = @ai_playerX.take_turn(@board)
-    @board.get_num_moves_made.should == 1
-    @board = @ai_playerX.take_turn(TicTacToeBoard.new(4))
-    @board.get_num_moves_made.should == 1
+    move = @ai_playerX.get_move(@board)
+    move.should < @board.get_num_spaces
+    move.should >= 0
+    move = @ai_playerX.get_move(TicTacToeBoard.new(4))
+    move.should < 16
+    move.should >= 0
     
     @ai_playerX.set_difficulty("Medium")
-    @board = @ai_playerO.take_turn(@board)
-    @board.get_num_moves_made.should == 2
-    @board = @ai_playerX.take_turn(TicTacToeBoard.new(4))
-    @board.get_num_moves_made.should == 1
-    
+    move.should < @board.get_num_spaces
+    move.should >= 0
+    move = @ai_playerX.get_move(TicTacToeBoard.new(4))
+    move.should < 16
+    move.should >= 0
   end
   
-  it "ComputerPlayer.take_turn(Board, Hard) - testing this method with the hard difficulty turned on" do
+  it "ComputerPlayer.get_move(Board, Hard) - testing this method with the hard difficulty turned on" do
     @ai_playerX.set_difficulty("Hard")
     
     # RubyProf.start
     # Testing for 1st move
-    @board = @ai_playerX.take_turn(@board)
+    @board.make_move(@ai_playerX.get_move(@board), X)
     @board.space_contents(0).should == X
     @board.reset
     
     setup_x_win_on_row
-    @board = @ai_playerO.take_turn(@board)
+    @board.make_move(@ai_playerO.get_move(@board), O)
     @board.space_contents(2).should == O
     @board.reset
     
     setup_x_win_on_col
-    @board = @ai_playerO.take_turn(@board)
+    @board.make_move(@ai_playerO.get_move(@board), O)
     @board.space_contents(6).should == O
     @board.reset
     
     setup_o_win_on_forward_diag
-    @board = @ai_playerO.take_turn(@board)
+    @board.make_move(@ai_playerO.get_move(@board), O)
     @board.space_contents(8).should == O
     @board.reset
     
     setup_o_win_on_reverse_diag
-    @board = @ai_playerO.take_turn(@board)
+    @board.make_move(@ai_playerO.get_move(@board), O)
     @board.space_contents(6).should == O
     @board.reset
     
     setup_x_win_choose_best_empty_winner
-    @board = @ai_playerX.take_turn(@board)
+    @board.make_move(@ai_playerX.get_move(@board), X)
     @board.space_contents(3).should == X
     @board.reset
     
     setup_kiddie_corner_trap
-    @board = @ai_playerO.take_turn(@board)
+    @board.make_move(@ai_playerO.get_move(@board), O)
     @board.space_contents(0).should_not == O
     @board.space_contents(8).should_not == O
     @board.reset
     
     setup_triangle_trap
-    @board = @ai_playerO.take_turn(@board)
+    @board.make_move(@ai_playerO.get_move(@board), O)
     @board.space_contents(1).should_not == O
     @board.space_contents(3).should_not == O
     @board.space_contents(5).should_not == O
@@ -82,14 +84,14 @@ describe "profiling" do
     @board.reset
     
     setup_corner_trap
-    @board = @ai_playerO.take_turn(@board)
+    @board.make_move(@ai_playerO.get_move(@board), O)
     @board.space_contents(3).should_not == O
     @board.space_contents(6).should_not == O
     @board.space_contents(7).should_not == O
     @board.reset
     
     setup_opposite_corner_trap
-    @board = @ai_playerO.take_turn(@board)
+    @board.make_move(@ai_playerO.get_move(@board), O)
     @board.space_contents(1).should_not == O
     @board.space_contents(3).should_not == O
     @board.space_contents(5).should_not == O
