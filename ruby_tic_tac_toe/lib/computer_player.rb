@@ -8,6 +8,7 @@ class ComputerPlayer < Player
     @name = n
     @difficulty = d
     @rules = r
+    @game_logic = GameEngine.new
   end
   
   def set_difficulty(d)
@@ -19,7 +20,6 @@ class ComputerPlayer < Player
   end
     
   def get_move(board)
-    @game_logic = GameEngine.new
     ai_move = ""
     if @difficulty == "Easy"
       ai_move = easy_difficulty(board)
@@ -31,9 +31,6 @@ class ComputerPlayer < Player
     
     return ai_move
   end
-  
-  
-  protected #--------------------------------------------
   
   def easy_difficulty(board)
     return get_random_empty_space(board)

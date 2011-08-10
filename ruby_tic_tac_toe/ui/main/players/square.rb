@@ -6,12 +6,30 @@ module Square
       if is_it_humans_turn? == true
         make_move_if_game_isnt_over_yet(square, id)
       end
-    end
-    
-    if production.game.is_game_over?(production.game.board, production.game.rules) != false
+            
       squares = scene.find_by_name("square")
       squares.each do |s|
-        s.style.background_color = "red"
+        s.style.background_color = "yellow"
+      end
+      
+      if production.game.is_game_over?(production.game.board, production.game.rules) == false
+        if production.game.player_val == "Player vs AI"
+          ai_move = scene.find(production.game.get_ai_move)
+          fill_space_action(ai_move, production.game.current_team(production.game.board))
+          production.game.board.make_move(ai_move.id.to_i, production.game.current_team(production.game.board))
+        end
+      end
+            
+      squares = scene.find_by_name("square")
+      squares.each do |s|
+        s.style.background_color = "white"
+      end
+      
+      if production.game.is_game_over?(production.game.board, production.game.rules) != false
+        squares = scene.find_by_name("square")
+        squares.each do |s|
+          s.style.background_color = "red"
+        end
       end
     end
   end

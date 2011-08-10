@@ -21,26 +21,26 @@ class GUIGameEngine < GameEngine
     create_and_set_players
   end
   
-  def get_ai_move
-    if @player1.class == TicTacToeComputerPlayer && current_team(@board) == @player1.team
+  def get_ai_move    
+    if @player1.class == TicTacToeComputerPlayer
       return get_player_move(@player1)
-    elsif @player2.class == TicTacToeComputerPlayer && current_team(@board) == @player2.team
+    elsif @player2.class == TicTacToeComputerPlayer
       return get_player_move(@player2)
     end
+    
+    return "Error at get_ai_move"
   end
   
-  def get_player_move(plyr)
-    ai_move = -1
-    
+  def get_player_move(plyr)    
     if @difficulty == "Easy"
-      ai_move = plyr.easy_difficulty(board)
+      return plyr.easy_difficulty(board)
     elsif @difficulty == "Medium"
-      ai_move = plyr.medium_difficulty(board)
+      return plyr.medium_difficulty(board)
     else
-      ai_move = plyr.hard_difficulty(board)
+      return plyr.hard_difficulty(board)
     end
     
-    return ai_move
+    return "Error at get_player_move(plyr)"
   end
   
   
