@@ -8,7 +8,7 @@ require 'save_load_object'
 
 
 class GUIGameEngine < GameEngine
-  attr_reader :board, :rules, :player_val, :team_val
+  attr_reader :board, :rules, :player_val, :team_val, :difficulty
   
   def initialize(scene)
     @scene = scene
