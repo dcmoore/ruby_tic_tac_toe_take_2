@@ -52,7 +52,7 @@ class ComputerPlayer < Player
       return minimax(board, 0, 1) if board.get_num_moves_made <= 6
     end
     
-    return minimax(board, 0, 3)
+    return minimax(board, 0, 2)
   end
   
   def hard_difficulty(board)
@@ -125,36 +125,40 @@ class TicTacToeComputerPlayer < ComputerPlayer
       if board.get_num_moves_made <= 3 && @rules == "rows_cols_diags_blocks"
         return get_best_empty_middle_space(board)
       elsif board.get_num_moves_made >= 4 && board.get_num_moves_made <= 8
-        return minimax(board, 0, 3)
+        return minimax(board, 0, 4)
       end
     end
 
-    return minimax(board, 0, 3)
+    return minimax(board, 0, 2)
   end
   
   def get_best_empty_middle_space(board)
-    if board.space_contents(10) == @game_logic.what_is_the_other_team(@team) && board.space_contents(5) != @team
-      return 6 if board.space_contents(6) == EMPTY
-      return 9 if board.space_contents(9) == EMPTY
-    elsif board.space_contents(9) == @game_logic.what_is_the_other_team(@team) && board.space_contents(6) != @team
-      return 5 if board.space_contents(5) == EMPTY
-      return 10 if board.space_contents(10) == EMPTY
-    elsif board.space_contents(6) == @game_logic.what_is_the_other_team(@team) && board.space_contents(9) != @team
-      return 5 if board.space_contents(5) == EMPTY
-      return 10 if board.space_contents(10) == EMPTY
-    elsif board.space_contents(5) == @game_logic.what_is_the_other_team(@team) && board.space_contents(10) != @team
-      return 6 if board.space_contents(6) == EMPTY
-      return 9 if board.space_contents(9) == EMPTY
+    if board.space_contents(10) == @game_logic.what_is_the_other_team(@team) && board.space_contents(9) == @game_logic.what_is_the_other_team(@team) && board.space_contents(5) == @team
+      return 14
+    elsif board.space_contents(10) == @game_logic.what_is_the_other_team(@team) && board.space_contents(9) == @game_logic.what_is_the_other_team(@team) && board.space_contents(6) == @team
+      return 13
+    elsif board.space_contents(9) == @game_logic.what_is_the_other_team(@team) && board.space_contents(5) == @game_logic.what_is_the_other_team(@team) && board.space_contents(6) == @team
+      return 8
+    elsif board.space_contents(9) == @game_logic.what_is_the_other_team(@team) && board.space_contents(5) == @game_logic.what_is_the_other_team(@team) && board.space_contents(10) == @team
+      return 4
+    elsif board.space_contents(5) == @game_logic.what_is_the_other_team(@team) && board.space_contents(6) == @game_logic.what_is_the_other_team(@team) && board.space_contents(10) == @team
+      return 1
+    elsif board.space_contents(5) == @game_logic.what_is_the_other_team(@team) && board.space_contents(6) == @game_logic.what_is_the_other_team(@team) && board.space_contents(9) == @team
+      return 2
+    elsif board.space_contents(6) == @game_logic.what_is_the_other_team(@team) && board.space_contents(10) == @game_logic.what_is_the_other_team(@team) && board.space_contents(9) == @team
+      return 7
+    elsif board.space_contents(6) == @game_logic.what_is_the_other_team(@team) && board.space_contents(10) == @game_logic.what_is_the_other_team(@team) && board.space_contents(5) == @team
+      return 11
     end
     
-    if board.space_contents(10) == @game_logic.what_is_the_other_team(@team) && board.space_contents(9) == @game_logic.what_is_the_other_team(@team)
-      return 11
-    elsif board.space_contents(9) == @game_logic.what_is_the_other_team(@team) && board.space_contents(5) == @game_logic.what_is_the_other_team(@team)
-      return 13
-    elsif board.space_contents(5) == @game_logic.what_is_the_other_team(@team) && board.space_contents(6) == @game_logic.what_is_the_other_team(@team)
-      return 4
-    elsif board.space_contents(6) == @game_logic.what_is_the_other_team(@team) && board.space_contents(10) == @game_logic.what_is_the_other_team(@team)
-      return 2
+    if board.space_contents(10) == @game_logic.what_is_the_other_team(@team)
+      return 5 if board.space_contents(5) == EMPTY
+    elsif board.space_contents(9) == @game_logic.what_is_the_other_team(@team)
+      return 6 if board.space_contents(6) == EMPTY
+    elsif board.space_contents(6) == @game_logic.what_is_the_other_team(@team)
+      return 9 if board.space_contents(9) == EMPTY
+    elsif board.space_contents(5) == @game_logic.what_is_the_other_team(@team)
+      return 10 if board.space_contents(10) == EMPTY
     end
     
     return 5 if board.space_contents(5) == EMPTY
