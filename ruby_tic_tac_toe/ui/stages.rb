@@ -10,7 +10,7 @@
 #  end
 
 stage "default" do
-  default_scene "main"
+  default_scene "board"
   title "Tic Tac Toe"
   location [200, 25]
   size [310, 562]
