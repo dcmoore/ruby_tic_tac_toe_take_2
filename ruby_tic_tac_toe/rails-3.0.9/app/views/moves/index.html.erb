@@ -1,0 +1,27 @@
+<h1>Listing moves</h1>
+
+<table>
+  <tr>
+    <th>Game</th>
+    <th>Location</th>
+    <th>Team</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @moves.each do |move| %>
+  <tr>
+    <td><%= move.game_id %></td>
+    <td><%= move.location %></td>
+    <td><%= move.team %></td>
+    <td><%= link_to 'Show', move %></td>
+    <td><%= link_to 'Edit', edit_move_path(move) %></td>
+    <td><%= link_to 'Destroy', move, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Move', new_move_path %>

@@ -1,0 +1,17 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  game_id: 
+  rules: 
+  players: 
+  team: 
+  difficulty: 
+  board_size: 
+
+two:
+  game_id: 
+  rules: 
+  players: 
+  team: 
+  difficulty: 
+  board_size: 

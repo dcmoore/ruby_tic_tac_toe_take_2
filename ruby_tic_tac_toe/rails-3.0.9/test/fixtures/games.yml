@@ -1,0 +1,9 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  timestamp: 2011-08-12 09:42:46
+  outcome: 
+
+two:
+  timestamp: 2011-08-12 09:42:46
+  outcome: 

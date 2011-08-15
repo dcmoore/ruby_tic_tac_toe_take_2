@@ -1,0 +1,15 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Timestamp:</b>
+  <%= @game.timestamp %>
+</p>
+
+<p>
+  <b>Outcome:</b>
+  <%= @game.outcome %>
+</p>
+
+
+<%= link_to 'Edit', edit_game_path(@game) %> |
+<%= link_to 'Back', games_path %>
