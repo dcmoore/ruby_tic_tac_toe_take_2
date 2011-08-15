@@ -1,4 +1,10 @@
 Rails309::Application.routes.draw do
+  resources :settings
+
+  resources :moves
+
+  resources :games
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
