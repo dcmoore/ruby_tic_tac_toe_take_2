@@ -1,0 +1,67 @@
+<form id="settings" action="index_submit" method="get" accept-charset="utf-8">
+	<table id="options_box">
+		<tr>
+			<th colspan="2">Game Options</th>
+		</tr>
+		<tr>
+			<td>Select board dimensions:</td>
+			<td>
+				<select id="rules" name="rules">
+					<option value="3" selected="selected">3X3</option>
+					<option value="4">4X4</option>
+				</select>
+			</td>
+		</tr>
+		<tr class="alt">
+			<td>Select rules:</td>
+			<td>
+				<select id="rules" name="rules">
+					<option value="rows_cols_diags" selected="selected">Standard</option>
+					<option value="rows_cols_diags_blocks">2X2 Block Win</option>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td>Select player options:</td>
+			<td>
+				<select id="players" name="players">
+					<option value="pvc" selected="selected">Player vs AI</option>
+					<option value="pvp">Player vs Player</option>
+					<option value="cvc">AI vs AI</option>
+				</select>
+			</td>
+		</tr>
+		<tr class="alt">
+			<td>Select human player team</td>
+			<td>
+				<select id="team" name="team">
+					<option value="X" selected="selected">X</option>
+					<option value="O">O</option>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td>Select difficulty level for AI 1:</td>
+			<td>
+				<select id="ai1" name="ai1">
+					<option value="Easy" selected="selected">Easy</option>
+					<option value="Medium">Medium</option>
+					<option value="Hard">Hard</option>
+				</select>
+			</td>
+		</tr>
+		<tr class="alt">
+			<td>Select difficulty level for AI 2:</td>
+			<td>
+				<select id="ai2" name="ai2" disabled="disabled">
+					<option value="Easy" selected="selected">Easy</option>
+					<option value="Medium">Medium</option>
+					<option value="Hard">Hard</option>
+				</select>
+			</td>
+		</tr>
+		<tr class="footer">
+			<td colspan="2"><input type="submit" value="New Game"></td>
+		</tr>
+	</table>
+</form>
