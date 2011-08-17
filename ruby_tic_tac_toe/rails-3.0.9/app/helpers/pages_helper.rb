@@ -1,41 +1,37 @@
-# Why doesn't this work, but load does?
-require File.expand_path(File.dirname(__FILE__) + '/../../../lib/rails_game_engine')
-
 module PagesHelper
-  def get_game
-    if @current_game.class == RailsGameEngine
-      puts "=============================="
-      return @current_game
+  def print_board(board)
+    if board.get_size == 3
+      html = "<table id='board_3'>"
+    else
+      html = "<table id='board_4'>"
     end
     
-    puts "-----------------------------"
-    # return RailsGameEngine.new(3, "rows_cols_diags", "pvc", "X", "Easy", "Easy")
-  end
-
-  def print_board
-    return "TODO - pages_helper"
+    board.get_num_spaces.times do |location|
+      if (location % board.get_size) == (board.get_size)
+        html += "<tr>"
+      end
+      
+      if board.space_contents(location) == nil
+        html += "<td></td>"
+      else
+        html += "<td>" + board.space_contents(location) + "</td>"
+      end
+      
+      if (location % board.get_size) == (board.get_size - 1)
+        html += "</tr>"
+      end
+    end
     
-    # html = "<table id='board'>"
-    # html += "<tr>"
-    # html += "<td>X</td>"
-    # html += "<td>X</td>"
-    # html += "<td></td>"
-    # html += "</tr>"
-    # html += "<tr>"
-    # html += "<td></td>"
-    # html += "<td>O</td>"
-    # html += "<td></td>"
-    # html += "</tr>"
-    # html += "<tr>"
-    # html += "<td></td>"
-    # html += "<td></td>"
-    # html += "<td></td>"
-    # html += "</tr>"
-    # html += "</table>"
-    # return html
+    return html + "</table>"
   end
   
-  def get_square_html
-    
+  def get_square_val(team)
+    if team == 1
+      return "X"
+    elsif team == 2
+      return "O"
+    else
+      return " "
+    end
   end
 end

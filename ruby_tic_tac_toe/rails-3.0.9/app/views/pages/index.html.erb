@@ -1,7 +1,7 @@
 <%= render 'layouts/sidebar' %>
 
 <div id="body">
-	<%= print_board.html_safe %>
+	<%= print_board(session[:current_game].board).html_safe %>
 	<br />
 	<br />
 	<br />

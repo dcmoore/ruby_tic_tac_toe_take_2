@@ -1,7 +1,7 @@
 <%= render 'layouts/sidebar' %>
 
 <div id="body">
-	<%= render 'layouts/board' %>
+	<%= print_board(session[:current_game].board).html_safe %>
 	<br />
 	<%= render 'layouts/replay' %>
 	<br />
