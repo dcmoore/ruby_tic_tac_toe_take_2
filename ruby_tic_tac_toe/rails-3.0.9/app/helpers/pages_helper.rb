@@ -13,8 +13,10 @@ module PagesHelper
       
       if board.space_contents(location) == nil
         html += "<td id='" + location.to_s + "'></td>"
+        puts location
       else
-        html += "<td id='" + location.to_s + "'>" + board.space_contents(location) + "</td>"
+        puts "Should be getting the square's value here"
+        html += "<td id='" + location.to_s + "'>" + get_square_val(board.space_contents(location)) + "</td>"
       end
       
       if (location % board.get_size) == (board.get_size - 1)

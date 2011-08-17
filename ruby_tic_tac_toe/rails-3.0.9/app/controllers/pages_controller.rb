@@ -4,6 +4,10 @@ class PagesController < ApplicationController
   def index
     @title = "Tic Tac Toe | Play Mode"
     @games = Game.all
+    
+    if params[:move] != nil
+      make_move(params[:move].to_i)
+    end
   end
 
   def review
@@ -21,5 +25,12 @@ class PagesController < ApplicationController
     end
     
     redirect_to '/index'
+  end
+  
+  private #--------------------------------
+  
+  def make_move(location)
+    session[:current_game].board.make_move(location, session[:current_game].current_team(session[:current_game].board))
+    puts "Made Move @ Location : #{location} with team #{session[:current_game].board.space_contents(location)}"
   end
 end

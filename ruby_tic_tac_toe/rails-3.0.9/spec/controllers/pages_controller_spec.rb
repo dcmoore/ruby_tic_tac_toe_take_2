@@ -32,5 +32,11 @@ describe PagesController do
       session[:current_game].player2.team.should == 2
       session[:current_game].player2.class.should == TicTacToeComputerPlayer
     end
+    
+    it "should make the appropriate move when a square is clicked" do
+      post :new_game, :board_size => "3", :rules => "rows_cols_diags", :players => "pvp", :team => "O", :ai1 => "Hard", :ai2 => "Hard"
+      match 'index?move=4'
+      session[:current_game].board.space_contents(4).should == 1
+    end
   end
 end
