@@ -20,4 +20,16 @@ $(document).ready(function() {
 			$("select#team").attr("disabled","disabled");
 		}
 	});
+	
+	for(square = 0; square < 16; square++) {
+		armCellForClick(square);
+	}
 });
+
+function armCellForClick(square) {
+	var cell = $("td#" + square);
+
+	cell.click(function() {
+		window.location = "/index?move=" + square;
+	});	
+}

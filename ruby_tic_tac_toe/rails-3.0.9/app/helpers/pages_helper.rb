@@ -12,9 +12,9 @@ module PagesHelper
       end
       
       if board.space_contents(location) == nil
-        html += "<td></td>"
+        html += "<td id='" + location.to_s + "'></td>"
       else
-        html += "<td>" + board.space_contents(location) + "</td>"
+        html += "<td id='" + location.to_s + "'>" + board.space_contents(location) + "</td>"
       end
       
       if (location % board.get_size) == (board.get_size - 1)
