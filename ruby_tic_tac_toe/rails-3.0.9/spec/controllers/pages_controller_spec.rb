@@ -35,8 +35,11 @@ describe PagesController do
     
     it "should make the appropriate move when a square is clicked" do
       post :new_game, :board_size => "3", :rules => "rows_cols_diags", :players => "pvp", :team => "O", :ai1 => "Hard", :ai2 => "Hard"
-      match 'index?move=4'
+      match 'index?move=4' # Test isn't going to index with a move of 4. Why not? Why can't I run a get command on index?move=4
       session[:current_game].board.space_contents(4).should == 1
     end
+    
+    it "should not allow moves to be made if the space is full"
+    it "should not allow moves to be made if the game is over"
   end
 end

@@ -23,14 +23,15 @@ class PagesController < ApplicationController
     else
       session[:current_game] = RailsGameEngine.new(params[:board_size].to_i, params[:rules], params[:players], params[:team], params[:ai1], params[:ai2])
     end
-    
+
     redirect_to '/index'
   end
   
   private #--------------------------------
   
   def make_move(location)
-    session[:current_game].board.make_move(location, session[:current_game].current_team(session[:current_game].board))
-    puts "Made Move @ Location : #{location} with team #{session[:current_game].board.space_contents(location)}"
+    if session[:current_game].board.space_contents(location) == nil && session[:current_game].is_game_over?(session[:current_game].board, session[:current_game].rules) == false
+      session[:current_game].board.make_move(location, session[:current_game].current_team(session[:current_game].board))
+    end
   end
 end
