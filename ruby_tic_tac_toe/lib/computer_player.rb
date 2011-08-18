@@ -10,6 +10,10 @@ class ComputerPlayer < Player
     @rules = r
     @game_logic = GameEngine.new
   end
+
+  def get_difficulty #TODO - Refactor difficulty into an attr_accessor
+    @difficulty
+  end
   
   def set_difficulty(d)
     @difficulty = d

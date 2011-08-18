@@ -56,8 +56,15 @@ describe PagesController do
       session[:current_game].rules.should == "rows_cols_diags_blocks"
       session[:current_game].player1.team.should == 1
       session[:current_game].player1.class.should == TicTacToeComputerPlayer
+      session[:current_game].player1.get_difficulty.should == "Hard"
       session[:current_game].player2.team.should == 2
       session[:current_game].player2.class.should == TicTacToeComputerPlayer
+      session[:current_game].player2.get_difficulty.should == "Hard"
+    end
+    
+    it "should make the first move if the settings have a computer player up first" do
+      post :new_game, :board_size => "3", :rules => "rows_cols_diags", :players => "pvc", :team => "O", :ai1 => "Easy", :ai2 => "Easy"
+      session[:current_game].board.get_num_moves_made.should == 1
     end
   end
 end

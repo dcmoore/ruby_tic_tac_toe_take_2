@@ -23,7 +23,11 @@ class PagesController < ApplicationController
     else
       session[:current_game] = RailsGameEngine.new(params[:board_size].to_i, params[:rules], params[:players], params[:team], params[:ai1], params[:ai2])
     end
-
+    
+    if session[:current_game].board.get_num_moves_made == 0 && (params[:players] == "cvc" || (params[:players] == "pvc" && params[:team] == "O"))
+      session[:current_game].board.make_move(session[:current_game].get_ai_move, 1)
+    end
+    
     redirect_to '/index'
   end
   

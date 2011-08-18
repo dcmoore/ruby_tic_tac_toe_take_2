@@ -16,10 +16,26 @@ class RailsGameEngine < GameEngine
     create_and_set_players(p, team, diff1, diff2)
   end
   
-  def get_ai_move    
+  def get_ai_move
+    if @player1.class == TicTacToeComputerPlayer && @player1.team == current_team(@board)
+      return get_player_move(@player1)
+    elsif @player2.class == TicTacToeComputerPlayer && @player2.team == current_team(@board)
+      return get_player_move(@player2)
+    end
+    
+    raise "Error at #{__FILE__} #{__LINE__}"
   end
   
   def get_player_move(plyr)    
+    if plyr.get_difficulty == "Easy"
+      return plyr.easy_difficulty(@board)
+    elsif plyr.get_difficulty == "Medium"
+      return plyr.medium_difficulty(@board)
+    else
+      return plyr.hard_difficulty(@board)
+    end
+    
+    raise "Error at #{__FILE__} #{__LINE__}"
   end
   
   #private --------------------------------------------
