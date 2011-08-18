@@ -2,14 +2,41 @@ require 'spec_helper'
 
 describe PagesController do
   render_views
-  
+    
   describe "GET 'index'" do
+    before(:each) do
+      session[:current_game] = RailsGameEngine.new(3, "rows_cols_diags", "pvp", "X", "Easy", "Easy")
+    end
+  
     it "should be successful" do
-      match 'index'
+      get 'index'
       response.should be_success
+      response.should have_selector("title", :content => "Play")
+    end
+  
+    it "should make the appropriate move when a square is clicked" do
+      post :index, :move => 4
+      session[:current_game].board.space_contents(4).should == 1
+    end
+
+    it "should not allow moves to be made if the space is full" do
+      post :index, :move => 4
+      post :index, :move => 4
+      session[:current_game].board.get_num_moves_made.should == 1
+    end
+  
+    it "should not allow moves to be made if the game is over" do
+      post :index, :move => 0
+      post :index, :move => 4
+      post :index, :move => 1
+      post :index, :move => 5
+      post :index, :move => 2
+      post :index, :move => 6
+      post :index, :move => 7
+      session[:current_game].board.get_num_moves_made.should == 5
     end
   end
-  
+
   describe "GET 'review'" do
     it "should be successful" do
       match 'review'
@@ -32,14 +59,5 @@ describe PagesController do
       session[:current_game].player2.team.should == 2
       session[:current_game].player2.class.should == TicTacToeComputerPlayer
     end
-    
-    it "should make the appropriate move when a square is clicked" do
-      post :new_game, :board_size => "3", :rules => "rows_cols_diags", :players => "pvp", :team => "O", :ai1 => "Hard", :ai2 => "Hard"
-      match 'index?move=4' # Test isn't going to index with a move of 4. Why not? Why can't I run a get command on index?move=4
-      session[:current_game].board.space_contents(4).should == 1
-    end
-    
-    it "should not allow moves to be made if the space is full"
-    it "should not allow moves to be made if the game is over"
   end
 end
