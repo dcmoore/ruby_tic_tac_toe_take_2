@@ -51,20 +51,34 @@ describe PagesController do
     end
     
     it "sets options of new game based on params" do
-      post :new_game, :board_size => "4", :rules => "rows_cols_diags_blocks", :players => "cvc", :team => "O", :ai1 => "Hard", :ai2 => "Hard"
+      post :new_game, :board_size => "4", :rules => "rows_cols_diags_blocks", :players => "cvc", :team => "O", :ai1 => "Easy", :ai2 => "Easy"
       session[:current_game].board.get_size.should == 4
       session[:current_game].rules.should == "rows_cols_diags_blocks"
       session[:current_game].player1.team.should == 1
       session[:current_game].player1.class.should == TicTacToeComputerPlayer
-      session[:current_game].player1.get_difficulty.should == "Hard"
+      session[:current_game].player1.get_difficulty.should == "Easy"
       session[:current_game].player2.team.should == 2
       session[:current_game].player2.class.should == TicTacToeComputerPlayer
-      session[:current_game].player2.get_difficulty.should == "Hard"
+      session[:current_game].player2.get_difficulty.should == "Easy"
     end
     
     it "should make the first move if the settings have a computer player up first" do
-      post :new_game, :board_size => "3", :rules => "rows_cols_diags", :players => "pvc", :team => "O", :ai1 => "Easy", :ai2 => "Easy"
+      post :new_game, :board_size => "3", :rules => "rows_cols_diags_blocks", :players => "pvc", :team => "O", :ai1 => "Easy", :ai2 => "Easy"
       session[:current_game].board.get_num_moves_made.should == 1
+    end
+    
+    it "the computer should make moves when and where it is supposed to" do
+      post :new_game, :board_size => "3", :rules => "rows_cols_diags", :players => "pvc", :team => "X", :ai1 => "Hard", :ai2 => "Easy"
+      post :index, :move => 0
+      session[:current_game].board.space_contents(4).should == 2
+      post :index, :move => 1
+      session[:current_game].board.space_contents(2).should == 2
+      session[:current_game].board.get_num_moves_made.should == 4
+    end
+    
+    it "the computer should play out a full game if the settings are AI vs AI" do
+      post :new_game, :board_size => "3", :rules => "rows_cols_diags", :players => "cvc", :team => "X", :ai1 => "Easy", :ai2 => "Easy"
+      session[:current_game].is_game_over?(session[:current_game].board, session[:current_game].rules).should_not == false
     end
   end
 end

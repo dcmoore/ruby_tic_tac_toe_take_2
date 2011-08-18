@@ -27,4 +27,10 @@ describe Move do
     temp = Move.new(@attr.merge(column => "some text"))
     temp.should_not be_valid
   end
+  
+  it "should belong to the right Game Model" do
+    test_game = Game.new(:outcome => "X Won")
+    test_move = Move.new(:game_id => test_game.id, :location => 0, :team => 1)
+    test_game[:move].should == test_move.id
+  end
 end
