@@ -1,9 +1,10 @@
 module PagesHelper
   def print_board(board)
+    html = "<div id='board_con'>"
     if board.get_size == 3
-      html = "<table id='board_3'>"
+      html += "<table id='board_3'>"
     else
-      html = "<table id='board_4'>"
+      html += "<table id='board_4'>"
     end
     
     board.get_num_spaces.times do |location|
@@ -22,7 +23,7 @@ module PagesHelper
       end
     end
     
-    return html + "</table>"
+    return html + "</table></div>"
   end
   
   def get_square_val(team)

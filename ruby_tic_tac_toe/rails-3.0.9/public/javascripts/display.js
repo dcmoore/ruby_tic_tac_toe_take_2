@@ -29,7 +29,7 @@ $(document).ready(function() {
 function armCellForClick(square) {
 	var cell = $("td#" + square);
 
-	cell.click(function() {
-		window.location = "/index?move=" + square;
+	cell.live("click", function() {
+		$("#board_con").load("/index?move="+square+" #board_con")
 	});	
 }

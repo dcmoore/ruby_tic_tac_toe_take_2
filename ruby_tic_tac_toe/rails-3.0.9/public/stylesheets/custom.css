@@ -42,11 +42,37 @@ table#board_3 td {
     height:150px;
 }
 
+table#board_review_3 {
+    border-collapse:collapse;
+    border: 3px solid #2E2E2E;
+}
+table#board_review_3 td {
+    font-size:90px;
+    border: 3px solid #2E2E2E;
+	background-color: #D1D1D1;
+    text-align:center;
+    width:150px;
+    height:150px;
+}
+
 table#board_4 {
     border-collapse:collapse;
     border: 3px solid #2E2E2E;
 }
 table#board_4 td {
+    font-size:67px;
+    border: 3px solid #2E2E2E;
+	background-color: #D1D1D1;
+    text-align:center;
+    width:112px;
+    height:112px;
+}
+
+table#board_review_4 {
+    border-collapse:collapse;
+    border: 3px solid #2E2E2E;
+}
+table#board_review_4 td {
     font-size:67px;
     border: 3px solid #2E2E2E;
 	background-color: #D1D1D1;
