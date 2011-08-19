@@ -5,13 +5,15 @@ class PagesController < ApplicationController
     @title = "Tic Tac Toe | Play Mode"
     @games = Game.all
     
-    if params[:move] != nil
+    if params[:move] != nil && session[:current_game].board.space_contents(location) == nil && returns_false_if_game_isnt_over == false
       make_move(params[:move].to_i)
     end
     
     if returns_false_if_game_isnt_over == false && is_it_computers_turn? == true
-      session[:current_game].board.make_move(session[:current_game].get_ai_move, session[:current_game].current_team(session[:current_game].board))
+  	  make_move(session[:current_game].get_ai_move)
     end
+	
+	  set_record_flag_if_game_over
   end
 
   def review
@@ -20,7 +22,7 @@ class PagesController < ApplicationController
   end
   
   def new_game
-    session[:current_game] = ""
+    reset_session_vars
         
     if params[:board_size] == nil
       session[:current_game] = RailsGameEngine.new(3, "rows_cols_diags", "pvc", "X", "Easy", "Easy")
@@ -29,13 +31,15 @@ class PagesController < ApplicationController
     end
     
     if session[:current_game].board.get_num_moves_made == 0 && params[:players] == "pvc" && params[:team] == "O"
-      session[:current_game].board.make_move(session[:current_game].get_ai_move, 1)
+      make_move(session[:current_game].get_ai_move)
     end
     
     if params[:players] == "cvc"
       while returns_false_if_game_isnt_over == false
-        session[:current_game].board.make_move(session[:current_game].get_ai_move, session[:current_game].current_team(session[:current_game].board))
+        make_move(session[:current_game].get_ai_move)
       end
+	  
+	    set_record_flag_if_game_over
     end
     
     redirect_to '/index'
@@ -43,10 +47,19 @@ class PagesController < ApplicationController
   
   private #--------------------------------
   
+  def reset_session_vars
+    session[:current_game] = ""
+    session[:recorded_game_yet] = "no"
+    session[:moves] = []
+    session[:team] = []
+    @game_id = nil
+  end
+  
   def make_move(location)
-    if session[:current_game].board.space_contents(location) == nil && returns_false_if_game_isnt_over == false
-      session[:current_game].board.make_move(location, session[:current_game].current_team(session[:current_game].board))
-    end
+    team = session[:current_game].current_team(session[:current_game].board)
+    session[:current_game].board.make_move(location, team)
+    session[:moves].push(location)
+    session[:team].push(team)
   end
   
   def returns_false_if_game_isnt_over
@@ -64,5 +77,27 @@ class PagesController < ApplicationController
       return true if session[:current_game].current_team(session[:current_game].board) == 2
     end
     return false
+  end
+  
+  def set_record_flag_if_game_over
+  	if returns_false_if_game_isnt_over != false && session[:recorded_game_yet] != "done"
+  		record_game_if_flag_set
+  	end
+  end
+  
+  def record_game_if_flag_set
+    game = Game.create(:outcome => get_outcome_text)
+    session[:moves].length.times do |i|
+      Move.create(:game_id => game.id, :location => session[:moves][i], :team => session[:team][i])
+    end
+	
+    session[:recorded_game_yet] = "done"
+    @game_id = game.id
+  end
+  
+  def get_outcome_text
+    return "X Won" if returns_false_if_game_isnt_over == 1
+	  return "O Won" if returns_false_if_game_isnt_over == 2
+	  return "Draw" if returns_false_if_game_isnt_over == 5
   end
 end
