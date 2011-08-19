@@ -35,4 +35,35 @@ module PagesHelper
       return " "
     end
   end
+  
+  def print_settings_comments
+	html = "<!--***"
+	
+	html += session[:current_game].board.get_size.to_s + ","
+	html += session[:current_game].rules.to_s + ","
+	
+	if session[:current_game].player1.class == TicTacToeComputerPlayer && session[:current_game].player2.class == TicTacToeComputerPlayer
+		html += "cvc,"
+		html += "X,"
+		html += session[:current_game].player1.get_difficulty.to_s + ","
+		html += session[:current_game].player2.get_difficulty.to_s
+	elsif session[:current_game].player1.class == TicTacToeComputerPlayer
+		html += "pvc,"
+		html += "O,"
+		html += session[:current_game].player1.get_difficulty.to_s + ","
+		html += "Easy"
+	elsif session[:current_game].player2.class == TicTacToeComputerPlayer
+		html += "pvc,"
+		html += "X,"
+		html += session[:current_game].player2.get_difficulty.to_s + ","
+		html += "Easy"
+	else
+		html += "pvp,"
+		html += "X,"
+		html += "Easy,"
+		html += "Easy"
+	end
+	
+	return html + "***-->"
+  end
 end
