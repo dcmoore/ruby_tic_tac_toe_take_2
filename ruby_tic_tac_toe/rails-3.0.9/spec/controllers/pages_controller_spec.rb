@@ -88,6 +88,21 @@ describe PagesController do
       match 'review'
       response.should be_success
     end
+    
+    it "should change the board state as the moves are being stepped through" do
+      test_game = Game.create(:outcome => "X Won")
+      test_move = Move.create(:game_id => test_game.id, :location => 0, :team => 1)
+      test_move = Move.create(:game_id => test_game.id, :location => 4, :team => 2)
+      test_move = Move.create(:game_id => test_game.id, :location => 1, :team => 1)
+      test_move = Move.create(:game_id => test_game.id, :location => 5, :team => 2)
+      test_move = Move.create(:game_id => test_game.id, :location => 2, :team => 1)
+      
+      post :review, :game => test_game.id, :move => 5
+      get_board.get_num_moves_made.should == 5
+      
+      post :review, :game => test_game.id, :move => 3
+      get_board.get_num_moves_made.should == 3
+    end
   end
   
   describe "POST or GET 'new_game'" do

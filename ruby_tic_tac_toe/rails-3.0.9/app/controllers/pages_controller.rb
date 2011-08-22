@@ -17,8 +17,15 @@ class PagesController < ApplicationController
   end
 
   def review
+    reset_session_vars
     @title = "Tic Tac Toe | Review Mode"
     @games = Game.all
+    
+    if Game.find(params[:game]).moves.find(:all, :order => "location DESC").first.location > 8
+      populate_board(4, params[:move].to_i)
+    else
+      populate_board(3, params[:move].to_i)
+    end
   end
   
   def new_game
@@ -53,6 +60,17 @@ class PagesController < ApplicationController
     session[:moves] = []
     session[:team] = []
     @game_id = nil
+  end
+  
+  def populate_board(size, max_move)
+    session[:current_game] = RailsGameEngine.new(size, "rows_cols_diags", "pvc", "X", "Easy", "Easy")
+    i = 0
+    Game.find(params[:game]).moves.find(:all).each do |move|
+      if i < max_move
+        make_move(move.location)
+        i = i + 1
+      end
+    end
   end
   
   def make_move(location)

@@ -2,7 +2,7 @@
 	<h3>Game History</h3>
 	<ul>
 		<% @games.each do |game| %><li>
-			<a href='review?game=<%= game.id %>'><%= game.created_at %></a>
+			<a href='review?game=<%= game.id %>&move=<%= game.moves.length %>'><%= game.created_at %></a>
 		</li><% end %>
 	</ul>
 </div>

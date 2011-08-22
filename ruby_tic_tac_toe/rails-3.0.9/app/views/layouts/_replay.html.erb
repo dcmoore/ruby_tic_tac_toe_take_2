@@ -1,3 +1,15 @@
 <div id="replay">
-	<img id="prev_move" src="images/left.png" /><span id="replay">&nbsp;Replay Mode&nbsp;</span><img id="next_move" src="images/right.png" />
+	<% if params[:move].to_i > 1 %>
+		<a href='review?game=<%= params[:game] %>&move=<%= params[:move].to_i - 1 %>'>
+		<img id="prev_move" src="images/left.png" />
+		</a>
+	<% end %>
+	
+	<span id="replay">&nbsp;Replay Mode&nbsp;</span>
+	
+	<% if params[:move].to_i < Game.find(params[:game]).moves.length %>
+		<a href='review?game=<%= params[:game] %>&move=<%= params[:move].to_i + 1 %>'>
+		<img id="next_move" src="images/right.png" />
+		</a>
+	<% end %>
 </div>

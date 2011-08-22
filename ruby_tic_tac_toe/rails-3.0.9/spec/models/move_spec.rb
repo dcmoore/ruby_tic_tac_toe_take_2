@@ -29,8 +29,9 @@ describe Move do
   end
   
   it "should belong to the right Game Model" do
-    test_game = Game.new(:outcome => "X Won")
-    test_move = Move.new(:game_id => test_game.id, :location => 0, :team => 1)
-    test_game[:move].should == test_move.id
+    test_game = Game.create(:outcome => "X Won")
+    test_move = Move.create(:game_id => test_game.id, :location => 0, :team => 1)
+    test_move = Move.create(:game_id => test_game.id, :location => 1, :team => 2)
+    test_game.moves.length.should == 2
   end
 end
